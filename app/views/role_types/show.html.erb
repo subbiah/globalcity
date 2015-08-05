@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Membertype:</strong>
+  <%= @role_type.membertype %>
+</p>
+
+<p>
+  <strong>Activeflag:</strong>
+  <%= @role_type.activeflag %>
+</p>
+
+<%= link_to 'Edit', edit_role_type_path(@role_type) %> |
+<%= link_to 'Back', role_types_path %>

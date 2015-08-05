@@ -1,0 +1,39 @@
+<h1>Listing society_member_masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Society</th>
+      <th>Gclife</th>
+      <th>Fullname</th>
+      <th>Building</th>
+      <th>Mobileno</th>
+      <th>Ownertype</th>
+      <th>Membertyper</th>
+      <th>Activeflag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @society_member_masters.each do |society_member_master| %>
+      <tr>
+        <td><%= society_member_master.society_id %></td>
+        <td><%= society_member_master.gclife_id %></td>
+        <td><%= society_member_master.fullname %></td>
+        <td><%= society_member_master.building_id %></td>
+        <td><%= society_member_master.mobileno %></td>
+        <td><%= society_member_master.ownertype %></td>
+        <td><%= society_member_master.membertyper %></td>
+        <td><%= society_member_master.activeflag %></td>
+        <td><%= link_to 'Show', society_member_master %></td>
+        <td><%= link_to 'Edit', edit_society_member_master_path(society_member_master) %></td>
+        <td><%= link_to 'Destroy', society_member_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Society member master', new_society_member_master_path %>

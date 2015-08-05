@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Buildinname:</strong>
+  <%= @building_master.buildinname %>
+</p>
+
+<p>
+  <strong>Society:</strong>
+  <%= @building_master.society_id %>
+</p>
+
+<p>
+  <strong>Flatno:</strong>
+  <%= @building_master.flatno %>
+</p>
+
+<p>
+  <strong>Flattype:</strong>
+  <%= @building_master.flattype %>
+</p>
+
+<p>
+  <strong>Activeflag:</strong>
+  <%= @building_master.activeflag %>
+</p>
+
+<%= link_to 'Edit', edit_building_master_path(@building_master) %> |
+<%= link_to 'Back', building_masters_path %>

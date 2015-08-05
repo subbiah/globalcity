@@ -1,0 +1,61 @@
+<%= form_for(@association_master) do |f| %>
+  <% if @association_master.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@association_master.errors.count, "error") %> prohibited this association_master from being saved:</h2>
+
+      <ul>
+      <% @association_master.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :associationname %><br>
+    <%= f.text_field :associationname %>
+  </div>
+  <div class="field">
+    <%= f.label :township_id %><br>
+    <%= f.number_field :township_id %>
+  </div>
+  <div class="field">
+    <%= f.label :address1 %><br>
+    <%= f.text_field :address1 %>
+  </div>
+  <div class="field">
+    <%= f.label :address2 %><br>
+    <%= f.text_field :address2 %>
+  </div>
+  <div class="field">
+    <%= f.label :locationcode %><br>
+    <%= f.number_field :locationcode %>
+  </div>
+  <div class="field">
+    <%= f.label :citycode %><br>
+    <%= f.number_field :citycode %>
+  </div>
+  <div class="field">
+    <%= f.label :districcode %><br>
+    <%= f.number_field :districcode %>
+  </div>
+  <div class="field">
+    <%= f.label :statecode %><br>
+    <%= f.number_field :statecode %>
+  </div>
+  <div class="field">
+    <%= f.label :countrycode %><br>
+    <%= f.number_field :countrycode %>
+  </div>
+  <div class="field">
+    <%= f.label :pincode %><br>
+    <%= f.number_field :pincode %>
+  </div>
+  <div class="field">
+    <%= f.label :activeflag %><br>
+    <%= f.text_field :activeflag %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

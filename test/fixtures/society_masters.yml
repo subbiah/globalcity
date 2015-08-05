@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  societyname: MyString
+  association_id: 1
+  address1: MyString
+  address2: MyString
+  locationcode: 1
+  citycode: 1
+  districcode: 1
+  statecode: 1
+  countrycode: 1
+  pincode: 1
+  activeflag: MyString
+
+two:
+  societyname: MyString
+  association_id: 1
+  address1: MyString
+  address2: MyString
+  locationcode: 1
+  citycode: 1
+  districcode: 1
+  statecode: 1
+  countrycode: 1
+  pincode: 1
+  activeflag: MyString

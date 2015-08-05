@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  townshipname: MyString
+  activeflag: MyString
+  address1: MyString
+  address2: MyString
+  locationcode: 1
+  citycode: 1
+  districtcode: 1
+  satecode: 1
+  countrycode: 1
+  pincode: 1
+
+two:
+  townshipname: MyString
+  activeflag: MyString
+  address1: MyString
+  address2: MyString
+  locationcode: 1
+  citycode: 1
+  districtcode: 1
+  satecode: 1
+  countrycode: 1
+  pincode: 1

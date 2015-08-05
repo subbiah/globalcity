@@ -1,0 +1,2 @@
+module SocietyMastersHelper
+end

@@ -1,0 +1,45 @@
+<h1>Listing society_masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Societyname</th>
+      <th>Association</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>Locationcode</th>
+      <th>Citycode</th>
+      <th>Districcode</th>
+      <th>Statecode</th>
+      <th>Countrycode</th>
+      <th>Pincode</th>
+      <th>Activeflag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @society_masters.each do |society_master| %>
+      <tr>
+        <td><%= society_master.societyname %></td>
+        <td><%= society_master.association_id %></td>
+        <td><%= society_master.address1 %></td>
+        <td><%= society_master.address2 %></td>
+        <td><%= society_master.locationcode %></td>
+        <td><%= society_master.citycode %></td>
+        <td><%= society_master.districcode %></td>
+        <td><%= society_master.statecode %></td>
+        <td><%= society_master.countrycode %></td>
+        <td><%= society_master.pincode %></td>
+        <td><%= society_master.activeflag %></td>
+        <td><%= link_to 'Show', society_master %></td>
+        <td><%= link_to 'Edit', edit_society_master_path(society_master) %></td>
+        <td><%= link_to 'Destroy', society_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Society master', new_society_master_path %>

@@ -1,0 +1,1 @@
+json.extract! @society_master, :id, :societyname, :association_id, :address1, :address2, :locationcode, :citycode, :districcode, :statecode, :countrycode, :pincode, :activeflag, :created_at, :updated_at

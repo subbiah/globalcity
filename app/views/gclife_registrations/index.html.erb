@@ -1,0 +1,51 @@
+<h1>Listing gclife_registrations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Mobileno</th>
+      <th>Fullname</th>
+      <th>Gender</th>
+      <th>Dob</th>
+      <th>Emergencycontact</th>
+      <th>Occupation</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>Locationcode</th>
+      <th>Statecode</th>
+      <th>Countrycode</th>
+      <th>Pincode</th>
+      <th>Activeflag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @gclife_registrations.each do |gclife_registration| %>
+      <tr>
+        <td><%= gclife_registration.user_id %></td>
+        <td><%= gclife_registration.mobileno %></td>
+        <td><%= gclife_registration.fullname %></td>
+        <td><%= gclife_registration.gender %></td>
+        <td><%= gclife_registration.dob %></td>
+        <td><%= gclife_registration.emergencycontact %></td>
+        <td><%= gclife_registration.occupation %></td>
+        <td><%= gclife_registration.address1 %></td>
+        <td><%= gclife_registration.address2 %></td>
+        <td><%= gclife_registration.locationcode %></td>
+        <td><%= gclife_registration.statecode %></td>
+        <td><%= gclife_registration.countrycode %></td>
+        <td><%= gclife_registration.pincode %></td>
+        <td><%= gclife_registration.activeflag %></td>
+        <td><%= link_to 'Show', gclife_registration %></td>
+        <td><%= link_to 'Edit', edit_gclife_registration_path(gclife_registration) %></td>
+        <td><%= link_to 'Destroy', gclife_registration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Gclife registration', new_gclife_registration_path %>

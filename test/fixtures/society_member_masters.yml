@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  society_id: 1
+  gclife_id: 1
+  fullname: MyString
+  building_id: 1
+  mobileno: 1
+  ownertype: MyString
+  membertyper: MyString
+  activeflag: MyString
+
+two:
+  society_id: 1
+  gclife_id: 1
+  fullname: MyString
+  building_id: 1
+  mobileno: 1
+  ownertype: MyString
+  membertyper: MyString
+  activeflag: MyString

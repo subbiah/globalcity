@@ -1,0 +1,39 @@
+<h1>Listing gclife_registration_flatdetails</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Gclifeid</th>
+      <th>Societyid</th>
+      <th>Buildingid</th>
+      <th>Ownertypeid</th>
+      <th>Membertypeid</th>
+      <th>Relationshipid</th>
+      <th>Tenurestart</th>
+      <th>Tenureend</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @gclife_registration_flatdetails.each do |gclife_registration_flatdetail| %>
+      <tr>
+        <td><%= gclife_registration_flatdetail.gclifeid %></td>
+        <td><%= gclife_registration_flatdetail.societyid %></td>
+        <td><%= gclife_registration_flatdetail.buildingid %></td>
+        <td><%= gclife_registration_flatdetail.ownertypeid %></td>
+        <td><%= gclife_registration_flatdetail.membertypeid %></td>
+        <td><%= gclife_registration_flatdetail.relationshipid %></td>
+        <td><%= gclife_registration_flatdetail.tenurestart %></td>
+        <td><%= gclife_registration_flatdetail.tenureend %></td>
+        <td><%= link_to 'Show', gclife_registration_flatdetail %></td>
+        <td><%= link_to 'Edit', edit_gclife_registration_flatdetail_path(gclife_registration_flatdetail) %></td>
+        <td><%= link_to 'Destroy', gclife_registration_flatdetail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Gclife registration flatdetail', new_gclife_registration_flatdetail_path %>

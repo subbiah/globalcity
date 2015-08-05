@@ -1,0 +1,1 @@
+json.extract! @gclife_registration, :id, :user_id, :mobileno, :fullname, :gender, :dob, :emergencycontact, :occupation, :address1, :address2, :locationcode, :statecode, :countrycode, :pincode, :activeflag, :created_at, :updated_at

@@ -1,0 +1,45 @@
+<h1>Listing association_masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Associationname</th>
+      <th>Township</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>Locationcode</th>
+      <th>Citycode</th>
+      <th>Districcode</th>
+      <th>Statecode</th>
+      <th>Countrycode</th>
+      <th>Pincode</th>
+      <th>Activeflag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @association_masters.each do |association_master| %>
+      <tr>
+        <td><%= association_master.associationname %></td>
+        <td><%= association_master.township_id %></td>
+        <td><%= association_master.address1 %></td>
+        <td><%= association_master.address2 %></td>
+        <td><%= association_master.locationcode %></td>
+        <td><%= association_master.citycode %></td>
+        <td><%= association_master.districcode %></td>
+        <td><%= association_master.statecode %></td>
+        <td><%= association_master.countrycode %></td>
+        <td><%= association_master.pincode %></td>
+        <td><%= association_master.activeflag %></td>
+        <td><%= link_to 'Show', association_master %></td>
+        <td><%= link_to 'Edit', edit_association_master_path(association_master) %></td>
+        <td><%= link_to 'Destroy', association_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Association master', new_association_master_path %>

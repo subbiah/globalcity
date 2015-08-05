@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Society:</strong>
+  <%= @society_member_master.society_id %>
+</p>
+
+<p>
+  <strong>Gclife:</strong>
+  <%= @society_member_master.gclife_id %>
+</p>
+
+<p>
+  <strong>Fullname:</strong>
+  <%= @society_member_master.fullname %>
+</p>
+
+<p>
+  <strong>Building:</strong>
+  <%= @society_member_master.building_id %>
+</p>
+
+<p>
+  <strong>Mobileno:</strong>
+  <%= @society_member_master.mobileno %>
+</p>
+
+<p>
+  <strong>Ownertype:</strong>
+  <%= @society_member_master.ownertype %>
+</p>
+
+<p>
+  <strong>Membertyper:</strong>
+  <%= @society_member_master.membertyper %>
+</p>
+
+<p>
+  <strong>Activeflag:</strong>
+  <%= @society_member_master.activeflag %>
+</p>
+
+<%= link_to 'Edit', edit_society_member_master_path(@society_member_master) %> |
+<%= link_to 'Back', society_member_masters_path %>

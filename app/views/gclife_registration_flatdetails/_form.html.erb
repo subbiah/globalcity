@@ -1,0 +1,49 @@
+<%= form_for(@gclife_registration_flatdetail) do |f| %>
+  <% if @gclife_registration_flatdetail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gclife_registration_flatdetail.errors.count, "error") %> prohibited this gclife_registration_flatdetail from being saved:</h2>
+
+      <ul>
+      <% @gclife_registration_flatdetail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :gclifeid %><br>
+    <%= f.number_field :gclifeid %>
+  </div>
+  <div class="field">
+    <%= f.label :societyid %><br>
+    <%= f.number_field :societyid %>
+  </div>
+  <div class="field">
+    <%= f.label :buildingid %><br>
+    <%= f.text_field :buildingid %>
+  </div>
+  <div class="field">
+    <%= f.label :ownertypeid %><br>
+    <%= f.number_field :ownertypeid %>
+  </div>
+  <div class="field">
+    <%= f.label :membertypeid %><br>
+    <%= f.number_field :membertypeid %>
+  </div>
+  <div class="field">
+    <%= f.label :relationshipid %><br>
+    <%= f.number_field :relationshipid %>
+  </div>
+  <div class="field">
+    <%= f.label :tenurestart %><br>
+    <%= f.date_select :tenurestart %>
+  </div>
+  <div class="field">
+    <%= f.label :tenureend %><br>
+    <%= f.date_select :tenureend %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

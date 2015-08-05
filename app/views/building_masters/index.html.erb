@@ -1,0 +1,33 @@
+<h1>Listing building_masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Buildinname</th>
+      <th>Society</th>
+      <th>Flatno</th>
+      <th>Flattype</th>
+      <th>Activeflag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @building_masters.each do |building_master| %>
+      <tr>
+        <td><%= building_master.buildinname %></td>
+        <td><%= building_master.society_id %></td>
+        <td><%= building_master.flatno %></td>
+        <td><%= building_master.flattype %></td>
+        <td><%= building_master.activeflag %></td>
+        <td><%= link_to 'Show', building_master %></td>
+        <td><%= link_to 'Edit', edit_building_master_path(building_master) %></td>
+        <td><%= link_to 'Destroy', building_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Building master', new_building_master_path %>

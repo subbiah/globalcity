@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  gclifeid: 1
+  societyid: 1
+  buildingid: 
+  ownertypeid: 1
+  membertypeid: 1
+  relationshipid: 1
+  tenurestart: 2015-08-01
+  tenureend: 2015-08-01
+
+two:
+  gclifeid: 1
+  societyid: 1
+  buildingid: 
+  ownertypeid: 1
+  membertypeid: 1
+  relationshipid: 1
+  tenurestart: 2015-08-01
+  tenureend: 2015-08-01
