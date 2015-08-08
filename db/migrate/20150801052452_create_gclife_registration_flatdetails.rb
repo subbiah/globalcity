@@ -1,6 +1,7 @@
 class CreateGclifeRegistrationFlatdetails < ActiveRecord::Migration
   def change
     create_table :gclife_registration_flatdetails do |t|
+      t.integer :user_id
       t.integer :gclife_registration_id
       t.integer :societyid
       t.integer :buildingid

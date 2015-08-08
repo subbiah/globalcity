@@ -1,6 +1,8 @@
 class GclifeRegistrationsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_gclife_registration, only: [:show, :edit, :update, :destroy]
+  
+ 
 
   # GET /gclife_registrations
   # GET /gclife_registrations.json
@@ -29,6 +31,7 @@ class GclifeRegistrationsController < ApplicationController
 
     respond_to do |format|
       if @gclife_registration.save
+         
         format.html { redirect_to @gclife_registration, notice: 'Gclife registration was successfully created.' }
         format.json { render :show, status: :created, location: @gclife_registration }
       else

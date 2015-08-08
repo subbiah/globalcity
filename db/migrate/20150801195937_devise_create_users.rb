@@ -18,6 +18,13 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.datetime :last_sign_in_at
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
+      
+      t.integer  :otp
+      t.string   :otpflag
+      t.string   :active
+      
+
+
 
       ## Confirmable
       # t.string   :confirmation_token

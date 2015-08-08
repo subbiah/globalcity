@@ -69,6 +69,6 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gclife_registration_flatdetail_params
-      params.require(:gclife_registration_flatdetail).permit(:gclifeid, :societyid, :buildingid, :ownertypeid, :membertypeid, :relationshipid, :tenurestart, :tenureend)
+      params.require(:gclife_registration_flatdetail).permit(:user_id, :gclifeid, :societyid, :buildingid, :ownertypeid, :membertypeid, :relationshipid, :tenurestart, :tenureend)
     end
 end

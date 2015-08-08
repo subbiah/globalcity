@@ -1,3 +1,3 @@
 class GclifeRegistration < ActiveRecord::Base
-   has_many :gclife_registration_flatdetail
+    belongs_to :user
 end
