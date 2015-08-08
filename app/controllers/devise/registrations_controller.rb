@@ -17,8 +17,7 @@ class Devise::RegistrationsController < DeviseController
 
     resource.save
     
-    uri = URI("http://URL/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=8880357925,8123733117&sender=GCSMST&message=testing#{rand(10000..99999)}&
-    format=json&port=8090")
+    uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=8880357925,8123733117&sender=GCSMST&message=testing#{rand(10000..99999)}&")
     req = Net::HTTP.get(uri)
     puts req #show result
     
