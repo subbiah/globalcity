@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :gclife_registration_flatdetails
 
   resources :gclife_registrations
@@ -30,6 +31,8 @@ Rails.application.routes.draw do
     get "sign_out", :to => "devise/sessions#destroy"
     get "verify_account", :to => "devise/registrations#verify_account"
     get "resend_otp", :to => "devise/registrations#resend_otp"
+    get "get_registered_users", :to => "devise/registrations#get_registered_users"
+    get "activate_users", :to => "devise/registrations#activate_users"
   end
 
   # Example of regular route:

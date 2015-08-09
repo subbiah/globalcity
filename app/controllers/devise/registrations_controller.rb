@@ -29,13 +29,12 @@ class Devise::RegistrationsController < DeviseController
 
     resource.save
     
-    uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code-#{code}&")
-    req = Net::HTTP.get(uri)
-    puts req #show result
-    
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code-#{code}&")
+        req = Net::HTTP.get(uri)
+        puts req #show result
 
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
@@ -46,8 +45,10 @@ class Devise::RegistrationsController < DeviseController
         gcFlat.buildingid = flat_details[:buildingid]
         gcFlat.ownertypeid = flat_details[:ownertypeid]
         gcFlat.member_type = flat_details[:member_type]
-        # gcFlat.user_id = resource.id
-        # gcFlat.user_id = resource.id
+        gcFlat.avenue_name = flat_details[:avenue_name]
+        gcFlat.flat_number = flat_details[:flat_number]
+        gcFlat.flat_type = flat_details[:flat_type]
+        gcFlat.user_id = resource.id
 
         from_date = Date.strptime(flat_details[:tenurestart], "%d-%m-%Y")
         to_date = Date.strptime(flat_details[:tenureend], "%d-%m-%Y")
@@ -62,6 +63,24 @@ class Devise::RegistrationsController < DeviseController
         puts "after saving flat details :::::::::::::::::::::::::::::::"
         puts gcFlat.inspect
         # puts resource.gclife_registration_flatdetails.inspect
+
+        #role creation information
+        members = ["Member","Committee_member","Secretary","Chairman","Treasurer","Non_members"]
+        roles = ["societyuser","societyadmin","associationadmin","associationmember","superadmin","Non_members"]
+
+        member_type = MemberType.new
+        member_type.member_type = flat_details[:member_type]
+        member_type.priority = members.index(member_type.member_type)
+        member_type.user_id = resource.id
+        member_type.save
+
+        role_type = RoleType.new
+        role_type.role_type = roles[member_type.priority]
+        role_type.priority = member_type.priority
+        role_type.user_id = resource.id
+        role_type.save
+
+        # end of the role cration
 
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
@@ -124,6 +143,27 @@ class Devise::RegistrationsController < DeviseController
       respond_with({:errors => "user not found"}, :location => verify_account_path)
     end
 
+  end
+
+  def get_registered_users
+    user = User.find(params[:user_id])
+    puts ":::::::::::::::::::::::::::: "
+    puts user.member_types.inspect
+    users = Array.new
+    User.all.each do |u|
+      if user.id != u.id && u.member_types[0].priority < user.member_types[0].priority
+        users.push(u)
+      end
+    end
+
+    respond_with(users, :location => verify_account_path)
+  end
+
+  def activate_users
+    user = User.find(params[:user_id])
+    user.active = params[:status]
+    user.save(:validate=>false)
+    respond_with(user, :location => verify_account_path)
   end
 
   # PUT /resource

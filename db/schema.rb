@@ -48,6 +48,9 @@ ActiveRecord::Schema.define(version: 20150801195937) do
     t.string   "membertypeid"
     t.string   "member_type"
     t.string   "relationshipid"
+    t.string   "avenue_name"
+    t.string   "flat_number"
+    t.string   "flat_type"
     t.date     "tenurestart"
     t.date     "tenureend"
     t.datetime "created_at"
@@ -74,15 +77,19 @@ ActiveRecord::Schema.define(version: 20150801195937) do
   end
 
   create_table "member_types", force: true do |t|
-    t.string   "membertype"
+    t.string   "member_type"
     t.string   "activeflag"
+    t.integer  "priority"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "role_types", force: true do |t|
-    t.string   "membertype"
+    t.string   "role_type"
     t.string   "activeflag"
+    t.integer  "priority"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
