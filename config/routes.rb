@@ -24,6 +24,14 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
    root 'gclife_registrations#index'
 
+   devise_scope :user do
+    get "sign_in", :to => "devise/sessions#new"
+    get "sign_up", :to => "devise/registrations#new"
+    get "sign_out", :to => "devise/sessions#destroy"
+    get "verify_account", :to => "devise/registrations#verify_account"
+    get "resend_otp", :to => "devise/registrations#resend_otp"
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

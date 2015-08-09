@@ -22,8 +22,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.integer  :otp
       t.string   :otpflag
       t.string   :active
-      
-
+      t.string   :mobile
 
 
       ## Confirmable
