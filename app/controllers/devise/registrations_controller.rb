@@ -28,7 +28,7 @@ class Devise::RegistrationsController < DeviseController
 
     resource.save
     
-    uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=testing#{code}&")
+    uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code - #{code}&")
     req = Net::HTTP.get(uri)
     puts req #show result
     
@@ -87,7 +87,7 @@ class Devise::RegistrationsController < DeviseController
     user = User.find(params[:user_id])
     if user
       # UserMailer.opt_email(user).deliver
-      uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=testing#{user.otp}&")
+      uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=code - #{user.otp}&")
       req = Net::HTTP.get(uri)
       puts req #show result
       respond_with({:success => true})
