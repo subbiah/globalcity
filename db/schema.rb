@@ -42,11 +42,12 @@ ActiveRecord::Schema.define(version: 20150801195937) do
   create_table "gclife_registration_flatdetails", force: true do |t|
     t.integer  "user_id"
     t.integer  "gclife_registration_id"
-    t.integer  "societyid"
-    t.integer  "buildingid"
-    t.integer  "ownertypeid"
-    t.integer  "membertypeid"
-    t.integer  "relationshipid"
+    t.string   "societyid"
+    t.string   "buildingid"
+    t.string   "ownertypeid"
+    t.string   "membertypeid"
+    t.string   "member_type"
+    t.string   "relationshipid"
     t.date     "tenurestart"
     t.date     "tenureend"
     t.datetime "created_at"
@@ -141,9 +142,10 @@ ActiveRecord::Schema.define(version: 20150801195937) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "otp"
+    t.string   "otp"
     t.string   "otpflag"
     t.string   "active"
+    t.string   "mobile"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end

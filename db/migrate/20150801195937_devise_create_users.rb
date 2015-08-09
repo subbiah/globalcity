@@ -19,7 +19,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
       
-      t.integer  :otp
+      t.string  :otp
       t.string   :otpflag
       t.string   :active
       t.string   :mobile

@@ -25,6 +25,7 @@ class Devise::RegistrationsController < DeviseController
     resource.otpflag = "Inactive"
 
     mobile = resource.mobile
+    
 
     resource.save
     
@@ -35,9 +36,37 @@ class Devise::RegistrationsController < DeviseController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
+
+        puts "flat details :::::::::::::::::::::::::::::::"
+        puts params[:user][:gclife_registration_flatdetails]
+        flat_details = params[:user][:gclife_registration_flatdetails]
+        gcFlat = GclifeRegistrationFlatdetail.new
+        # gcFlat.create(flat_details)
+        gcFlat.societyid = flat_details[:societyid]
+        gcFlat.buildingid = flat_details[:buildingid]
+        gcFlat.ownertypeid = flat_details[:ownertypeid]
+        gcFlat.member_type = flat_details[:member_type]
+        # gcFlat.user_id = resource.id
+        # gcFlat.user_id = resource.id
+
+        from_date = Date.strptime(flat_details[:tenurestart], "%d-%m-%Y")
+        to_date = Date.strptime(flat_details[:tenureend], "%d-%m-%Y")
+
+        gcFlat.tenurestart = from_date
+        gcFlat.tenureend = to_date
+
+        gcFlat.user_id = resource.id
+        puts "saving flat details :::::::::::::::::::::::::::::::"
+        gcFlat.save
+
+        puts "after saving flat details :::::::::::::::::::::::::::::::"
+        puts gcFlat.inspect
+        # puts resource.gclife_registration_flatdetails.inspect
+
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
-        respond_with resource, location: after_sign_up_path_for(resource)
+        respond_with resource.user_details, location: after_sign_up_path_for(resource)
+        # respond_with ({:user => resource, :flat_details => resource.gclife_registration_flatdetails}, location: after_sign_up_path_for(resource))
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         expire_data_after_sign_in!

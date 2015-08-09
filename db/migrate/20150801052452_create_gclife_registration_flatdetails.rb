@@ -7,6 +7,7 @@ class CreateGclifeRegistrationFlatdetails < ActiveRecord::Migration
       t.string :buildingid
       t.string :ownertypeid
       t.string :membertypeid
+      t.string :member_type
       t.string :relationshipid
       t.date :tenurestart
       t.date :tenureend
