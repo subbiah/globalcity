@@ -151,8 +151,11 @@ class Devise::RegistrationsController < DeviseController
     puts user.member_types.inspect
     users = Array.new
     User.all.each do |u|
-      if user.id != u.id && u.member_types[0].priority < user.member_types[0].priority
-        users.push(u)
+      if user.id != u.id && u.active == "Inactive" && u.member_types[0].priority < user.member_types[0].priority
+        users_json = Hash.new
+        users_json['user'] = u
+        users_json['flat_details'] = u.gclife_registration_flatdetails
+        users.push(users_json)
       end
     end
 
