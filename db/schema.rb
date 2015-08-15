@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801195937) do
+ActiveRecord::Schema.define(version: 20150815125825) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -42,15 +42,11 @@ ActiveRecord::Schema.define(version: 20150801195937) do
   create_table "gclife_registration_flatdetails", force: true do |t|
     t.integer  "user_id"
     t.integer  "gclife_registration_id"
-    t.string   "societyid"
-    t.string   "buildingid"
-    t.string   "ownertypeid"
-    t.string   "membertypeid"
-    t.string   "member_type"
-    t.string   "relationshipid"
-    t.string   "avenue_name"
-    t.string   "flat_number"
-    t.string   "flat_type"
+    t.integer  "societyid"
+    t.integer  "buildingid"
+    t.integer  "ownertypeid"
+    t.integer  "membertypeid"
+    t.integer  "relationshipid"
     t.date     "tenurestart"
     t.date     "tenureend"
     t.datetime "created_at"
@@ -76,20 +72,34 @@ ActiveRecord::Schema.define(version: 20150801195937) do
     t.datetime "updated_at"
   end
 
+  create_table "images", force: true do |t|
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "imageuploads", force: true do |t|
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "member_types", force: true do |t|
-    t.string   "member_type"
+    t.string   "membertype"
     t.string   "activeflag"
-    t.integer  "priority"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "role_types", force: true do |t|
-    t.string   "role_type"
+    t.string   "membertype"
     t.string   "activeflag"
-    t.integer  "priority"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -149,10 +159,9 @@ ActiveRecord::Schema.define(version: 20150801195937) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "otp"
+    t.integer  "otp"
     t.string   "otpflag"
     t.string   "active"
-    t.string   "mobile"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end

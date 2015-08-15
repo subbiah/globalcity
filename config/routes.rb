@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :imageuploads
+
+  resources :images
+
   devise_for :users
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :gclife_registration_flatdetails
