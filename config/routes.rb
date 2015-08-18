@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :flats
+
   resources :imageuploads
 
   resources :images

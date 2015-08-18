@@ -1,7 +1,7 @@
 class CreateBuildingMasters < ActiveRecord::Migration
   def change
     create_table :building_masters do |t|
-      t.integer :buildinname
+      t.string :buildinname
       t.integer :society_id
       t.integer :flatno
       t.string :flattype

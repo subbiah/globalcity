@@ -5,7 +5,7 @@ class CreateSocietyMasters < ActiveRecord::Migration
       t.integer :association_id
       t.string :address1
       t.string :address2
-      t.integer :locationcode
+      t.string :locationcode
       t.integer :citycode
       t.integer :districcode
       t.integer :statecode

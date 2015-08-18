@@ -1,0 +1,33 @@
+<%= form_for(@flat) do |f| %>
+  <% if @flat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@flat.errors.count, "error") %> prohibited this flat from being saved:</h2>
+
+      <ul>
+      <% @flat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :flat %><br>
+    <%= f.text_field :flat %>
+  </div>
+  <div class="field">
+    <%= f.label :flat_types %><br>
+    <%= f.text_field :flat_types %>
+  </div>
+  <div class="field">
+    <%= f.label :building_id %><br>
+    <%= f.number_field :building_id %>
+  </div>
+  <div class="field">
+    <%= f.label :active_flag %><br>
+    <%= f.number_field :active_flag %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

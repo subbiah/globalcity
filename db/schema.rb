@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150815125825) do
+ActiveRecord::Schema.define(version: 20150818183411) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20150815125825) do
   end
 
   create_table "building_masters", force: true do |t|
-    t.integer  "buildinname"
+    t.string   "buildinname"
     t.integer  "society_id"
     t.integer  "flatno"
     t.string   "flattype"
@@ -39,14 +39,27 @@ ActiveRecord::Schema.define(version: 20150815125825) do
     t.datetime "updated_at"
   end
 
+  create_table "flats", force: true do |t|
+    t.string   "flat"
+    t.string   "flat_types"
+    t.integer  "building_id"
+    t.integer  "active_flag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gclife_registration_flatdetails", force: true do |t|
     t.integer  "user_id"
     t.integer  "gclife_registration_id"
-    t.integer  "societyid"
-    t.integer  "buildingid"
-    t.integer  "ownertypeid"
-    t.integer  "membertypeid"
-    t.integer  "relationshipid"
+    t.string   "societyid"
+    t.string   "buildingid"
+    t.string   "ownertypeid"
+    t.string   "membertypeid"
+    t.string   "member_type"
+    t.string   "relationshipid"
+    t.string   "avenue_name"
+    t.string   "flat_number"
+    t.string   "flat_type"
     t.date     "tenurestart"
     t.date     "tenureend"
     t.datetime "created_at"
@@ -81,25 +94,20 @@ ActiveRecord::Schema.define(version: 20150815125825) do
     t.datetime "updated_at"
   end
 
-  create_table "imageuploads", force: true do |t|
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "member_types", force: true do |t|
-    t.string   "membertype"
+    t.string   "member_type"
     t.string   "activeflag"
+    t.integer  "priority"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "role_types", force: true do |t|
-    t.string   "membertype"
+    t.string   "role_type"
     t.string   "activeflag"
+    t.integer  "priority"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -109,7 +117,7 @@ ActiveRecord::Schema.define(version: 20150815125825) do
     t.integer  "association_id"
     t.string   "address1"
     t.string   "address2"
-    t.integer  "locationcode"
+    t.string   "locationcode"
     t.integer  "citycode"
     t.integer  "districcode"
     t.integer  "statecode"
@@ -123,9 +131,10 @@ ActiveRecord::Schema.define(version: 20150815125825) do
   create_table "society_member_masters", force: true do |t|
     t.integer  "society_id"
     t.integer  "gclife_id"
+    t.integer  "flat_id"
     t.string   "fullname"
     t.integer  "building_id"
-    t.integer  "mobileno"
+    t.string   "mobileno"
     t.string   "ownertype"
     t.string   "membertyper"
     t.string   "activeflag"
@@ -159,9 +168,10 @@ ActiveRecord::Schema.define(version: 20150815125825) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "otp"
+    t.string   "otp"
     t.string   "otpflag"
     t.string   "active"
+    t.string   "mobile"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end

@@ -3,9 +3,10 @@ class CreateSocietyMemberMasters < ActiveRecord::Migration
     create_table :society_member_masters do |t|
       t.integer :society_id
       t.integer :gclife_id
-      t.string :fullname
+      t.integer :flat_id
+      t.string  :fullname
       t.integer :building_id
-      t.integer :mobileno
+      t.string :mobileno
       t.string :ownertype
       t.string :membertyper
       t.string :activeflag

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flat: MyString
+  flat_types: MyString
+  building_id: 1
+  active_flag: 1
+
+two:
+  flat: MyString
+  flat_types: MyString
+  building_id: 1
+  active_flag: 1
