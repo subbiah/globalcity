@@ -39,7 +39,7 @@ task :readExcel => :environment do
         if index == 0
         data.associationname = a
         elsif index == 1
-          data.township_id = a
+          data.township_master_id = a
         end         
       end
       data.save
@@ -55,7 +55,7 @@ task :readExcel => :environment do
       if index == 0
         data.societyname = a
         elsif index == 1
-        data.association_id = a        
+        data.association_master_id = a        
       end
       end
       data.save
@@ -71,7 +71,7 @@ task :readExcel => :environment do
         if index == 0
         data.buildinname = a
         elsif index == 1
-          data.society_id = a
+          data.society_master_id = a
         elsif index == 2
           data.activeflag = a
         end         
@@ -91,7 +91,7 @@ task :readExcel => :environment do
         elsif index == 1
           data.flat_types = a
         elsif index == 2
-          data.building_id = a
+          data.building_master_id = a
         elsif index == 3
           data.active_flag = a
         end         
@@ -107,7 +107,7 @@ task :readExcel => :environment do
       data = SocietyMemberMaster.new
       sheet.row(row).each_with_index do |a, index|
         if index == 0
-        data.society_id = a
+        data.society_master_id = a
         elsif index == 1
           data.flat_id = a
         elsif index == 2

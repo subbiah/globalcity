@@ -3,7 +3,7 @@ class CreateFlats < ActiveRecord::Migration
     create_table :flats do |t|
       t.string :flat
       t.string :flat_types
-      t.integer :building_id
+      t.integer :building_master_id
       t.integer :active_flag
 
       t.timestamps

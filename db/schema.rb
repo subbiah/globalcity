@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20150818183411) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
-    t.integer  "township_id"
+    t.integer  "township_master_id"
     t.string   "address1"
     t.string   "address2"
     t.integer  "locationcode"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20150818183411) do
   create_table "flats", force: true do |t|
     t.string   "flat"
     t.string   "flat_types"
-    t.integer  "building_id"
+    t.integer  "building_master_id"
     t.integer  "active_flag"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150818183411) do
 
   create_table "society_masters", force: true do |t|
     t.string   "societyname"
-    t.integer  "association_id"
+    t.integer  "association_master_id"
     t.string   "address1"
     t.string   "address2"
     t.string   "locationcode"
@@ -130,11 +130,11 @@ ActiveRecord::Schema.define(version: 20150818183411) do
   end
 
   create_table "society_member_masters", force: true do |t|
-    t.integer  "society_id"
+    t.integer  "society_master_id"
     t.integer  "gclife_id"
     t.integer  "flat_id"
     t.string   "fullname"
-    t.integer  "building_id"
+    t.integer  "building_master_id"
     t.string   "mobileno"
     t.string   "ownertype"
     t.string   "membertyper"

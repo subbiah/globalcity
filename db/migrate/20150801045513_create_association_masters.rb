@@ -2,7 +2,7 @@ class CreateAssociationMasters < ActiveRecord::Migration
   def change
     create_table :association_masters do |t|
       t.string :associationname
-      t.integer :township_id
+      t.integer :township_master_id
       t.string :address1
       t.string :address2
       t.integer :locationcode
