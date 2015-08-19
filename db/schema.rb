@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20150818183411) do
     t.string   "activeflag"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "society_master_id"
   end
 
   create_table "flats", force: true do |t|
