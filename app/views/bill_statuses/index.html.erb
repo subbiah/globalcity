@@ -1,0 +1,41 @@
+<h1>Listing bill_statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Society master</th>
+      <th>Building master</th>
+      <th>User</th>
+      <th>Bill amt</th>
+      <th>Fy</th>
+      <th>Month</th>
+      <th>Status</th>
+      <th>Upload status</th>
+      <th>Deletion flag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bill_statuses.each do |bill_status| %>
+      <tr>
+        <td><%= bill_status.society_master_id %></td>
+        <td><%= bill_status.building_master_id %></td>
+        <td><%= bill_status.user_id %></td>
+        <td><%= bill_status.bill_amt %></td>
+        <td><%= bill_status.fy %></td>
+        <td><%= bill_status.month %></td>
+        <td><%= bill_status.status %></td>
+        <td><%= bill_status.upload_status %></td>
+        <td><%= bill_status.deletion_flag %></td>
+        <td><%= link_to 'Show', bill_status %></td>
+        <td><%= link_to 'Edit', edit_bill_status_path(bill_status) %></td>
+        <td><%= link_to 'Destroy', bill_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bill status', new_bill_status_path %>

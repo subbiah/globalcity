@@ -1,0 +1,53 @@
+<%= form_for(@bill_status) do |f| %>
+  <% if @bill_status.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bill_status.errors.count, "error") %> prohibited this bill_status from being saved:</h2>
+
+      <ul>
+      <% @bill_status.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :society_master_id %><br>
+    <%= f.text_field :society_master_id %>
+  </div>
+  <div class="field">
+    <%= f.label :building_master_id %><br>
+    <%= f.number_field :building_master_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :bill_amt %><br>
+    <%= f.number_field :bill_amt %>
+  </div>
+  <div class="field">
+    <%= f.label :fy %><br>
+    <%= f.text_field :fy %>
+  </div>
+  <div class="field">
+    <%= f.label :month %><br>
+    <%= f.text_field :month %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :upload_status %><br>
+    <%= f.text_field :upload_status %>
+  </div>
+  <div class="field">
+    <%= f.label :deletion_flag %><br>
+    <%= f.text_field :deletion_flag %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

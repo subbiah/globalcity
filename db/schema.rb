@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150818183411) do
+ActiveRecord::Schema.define(version: 20150823113813) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -25,6 +25,20 @@ ActiveRecord::Schema.define(version: 20150818183411) do
     t.integer  "countrycode"
     t.integer  "pincode"
     t.string   "activeflag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bill_statuses", force: true do |t|
+    t.integer  "society_master_id"
+    t.integer  "building_master_id"
+    t.integer  "user_id"
+    t.integer  "bill_amt"
+    t.string   "fy"
+    t.string   "month"
+    t.string   "status"
+    t.string   "upload_status"
+    t.string   "deletion_flag"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

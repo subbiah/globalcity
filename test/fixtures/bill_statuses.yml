@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  society_master_id: 
+  building_master_id: 1
+  user_id: 1
+  bill_amt: 1
+  fy: MyString
+  month: MyString
+  status: MyString
+  upload_status: MyString
+  deletion_flag: MyString
+
+two:
+  society_master_id: 
+  building_master_id: 1
+  user_id: 1
+  bill_amt: 1
+  fy: MyString
+  month: MyString
+  status: MyString
+  upload_status: MyString
+  deletion_flag: MyString

@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Society master:</strong>
+  <%= @bill_status.society_master_id %>
+</p>
+
+<p>
+  <strong>Building master:</strong>
+  <%= @bill_status.building_master_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @bill_status.user_id %>
+</p>
+
+<p>
+  <strong>Bill amt:</strong>
+  <%= @bill_status.bill_amt %>
+</p>
+
+<p>
+  <strong>Fy:</strong>
+  <%= @bill_status.fy %>
+</p>
+
+<p>
+  <strong>Month:</strong>
+  <%= @bill_status.month %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bill_status.status %>
+</p>
+
+<p>
+  <strong>Upload status:</strong>
+  <%= @bill_status.upload_status %>
+</p>
+
+<p>
+  <strong>Deletion flag:</strong>
+  <%= @bill_status.deletion_flag %>
+</p>
+
+<%= link_to 'Edit', edit_bill_status_path(@bill_status) %> |
+<%= link_to 'Back', bill_statuses_path %>
