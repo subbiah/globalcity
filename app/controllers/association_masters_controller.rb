@@ -1,12 +1,15 @@
 class AssociationMastersController < ApplicationController
   before_action :set_association_master, only: [:show, :edit, :update, :destroy]
-
+respond_to :json, :html
   # GET /association_masters
   # GET /association_masters.json
   def index
     @association_masters = AssociationMaster.all
   end
 
+  def all_association
+     respond_with AssociationMaster.all.includes(:society_masters => :building_masters) 
+  end
   # GET /association_masters/1
   # GET /association_masters/1.json
   def show

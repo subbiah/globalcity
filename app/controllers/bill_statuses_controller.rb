@@ -1,16 +1,38 @@
 class BillStatusesController < ApplicationController
   before_action :set_bill_status, only: [:show, :edit, :update, :destroy]
 
-  respond_to :html
+  respond_to :html,:json
   
+  def view_bill
+    @societyid = 5
+    @fy = "2015-2016"
+    @month = "january"
+    
+    @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month).count
+    @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
+    @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Paid").count
+    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Confirmed").count
+    @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").count
+    @confirmed_amount= BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
+    @balanced_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
+    
+    society_bill_management = { 
+      "total_count" => @total_count,
+      "due_status_count" => @due_status_count,
+      "paid_status_count" => @paid_status_count,
+      "confirmed_status" => @confirmed_status,
+      "due_amount" => @due_amount,
+      "confirmed_amount" => @confirmed_amount,
+      "balanced_amount" => @balanced_amount
+    }
+    respond_with society_bill_management
+  end
   
 
-def import
-  BillStatus.import(params[:file])
-  redirect_to root_url, notice: "Products imported."
-end
-
-
+  def import
+    BillStatus.import(params[:file])
+    redirect_to root_url, notice: "Products imported."
+  end
 
   def import_excel
     
@@ -55,6 +77,6 @@ end
     end
 
     def bill_status_params
-      params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag)
+      params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag, :flat_id, :confirmed_status)
     end
 end

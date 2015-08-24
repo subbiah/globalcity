@@ -4,11 +4,13 @@ class CreateBillStatuses < ActiveRecord::Migration
       t.integer :society_master_id
       t.integer :building_master_id
       t.integer :user_id
+      t.integer :flat_id
       t.integer :bill_amt
       t.string :fy
       t.string :month
       t.string :status
       t.string :upload_status
+      t.string :confirmed_status
       t.string :deletion_flag
 
       t.timestamps

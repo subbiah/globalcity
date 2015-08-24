@@ -31,6 +31,9 @@ Rails.application.routes.draw do
   resources :township_masters
 
   get 'ImportBill'  => 'bill_statuses#import_excel'
+  get 'association'  => 'association_masters#all_association'
+  
+  get 'view_bill' => 'bill_statuses#view_bill'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
