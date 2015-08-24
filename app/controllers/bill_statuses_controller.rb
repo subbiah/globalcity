@@ -8,13 +8,16 @@ class BillStatusesController < ApplicationController
     @fy = "2015-2016"
     @month = "january"
     
+    puts "___________________________________"
+    puts @sss = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "due").to_a.sum(&:bill_amt)
+    
     @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month).count
     @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
     @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Paid").count
-    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Confirmed").count
-    @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").count
-    @confirmed_amount= BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
-    @balanced_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
+    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").count
+    @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").to_a.sum(&:bill_amt)
+    @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").to_a.sum(&:bill_amt)
+    @balanced_amount = @due_amount - @confirmed_amount
     
     society_bill_management = { 
       "total_count" => @total_count,
