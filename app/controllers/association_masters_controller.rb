@@ -8,7 +8,13 @@ respond_to :json, :html
   end
 
   def all_association
-     respond_with AssociationMaster.all.includes(:society_masters => :building_masters) 
+    
+    # @data = AssociationMaster.includes(:society_masters => { :building_masters => :flats }) 
+    # puts @data.inspect
+    
+    # respond_with AssociationMaster.all.includes(:society_masters => :building_masters) 
+    @associations = AssociationMaster.all#.to_json(:include => [:society_masters])
+    respond_with @associations.to_json(:include => {:society_masters => {:include => :building_masters }})
   end
   # GET /association_masters/1
   # GET /association_masters/1.json

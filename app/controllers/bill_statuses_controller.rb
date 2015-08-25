@@ -18,7 +18,7 @@ class BillStatusesController < ApplicationController
     @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").to_a.sum(&:bill_amt)
     @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").to_a.sum(&:bill_amt)
     @balanced_amount = @due_amount - @confirmed_amount
-    
+     
     society_bill_management = { 
       "total_count" => @total_count,
       "due_status_count" => @due_status_count,
