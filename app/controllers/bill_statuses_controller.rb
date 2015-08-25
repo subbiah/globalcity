@@ -9,7 +9,6 @@ class BillStatusesController < ApplicationController
     @month = "january"
     
     puts "___________________________________"
-    puts @sss = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "due").to_a.sum(&:bill_amt)
     
     @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month).count
     @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
