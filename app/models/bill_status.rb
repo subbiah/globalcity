@@ -1,7 +1,7 @@
 class BillStatus < ActiveRecord::Base
   
 
-def self.import(file)
+def self.import(file,user_id,soceity_id,month,fy)
   puts "3333333333333333333333333333333333333333"
   puts file.original_filename
   spreadsheet = open_spreadsheet(file)
@@ -20,9 +20,10 @@ def self.import(file)
             @bill.bill_amt = value
           end
           
-          @bill.user_id = "4"
-          @bill.society_master_id = "5"
-          @bill.month = "jan"
+          @bill.user_id = user_id
+          @bill.society_master_id = soceity_id
+          @bill.month = month
+          @bill.fy = fy
           @bill.save
           
     end

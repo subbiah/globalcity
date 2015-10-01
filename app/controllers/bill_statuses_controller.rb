@@ -10,30 +10,94 @@ class BillStatusesController < ApplicationController
     
     puts "___________________________________"
     
-    @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month).count
-    @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").count
-    @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Paid").count
-    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").count
+    @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month)
+    @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due")
+    @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Paid")
+    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed")
     @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").to_a.sum(&:bill_amt)
     @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").to_a.sum(&:bill_amt)
+    
     @balanced_amount = @due_amount - @confirmed_amount
      
-    society_bill_management = { 
-      "total_count" => @total_count,
-      "due_status_count" => @due_status_count,
-      "paid_status_count" => @paid_status_count,
-      "confirmed_status" => @confirmed_status,
+    society_bill_management_count = { 
+      "total_count" => @total_count.count,
+      "due_status_count" => @due_status_count.count,
+      "paid_status_count" => @paid_status_count.count,
+      "confirmed_status" => @confirmed_status.count,
       "due_amount" => @due_amount,
       "confirmed_amount" => @confirmed_amount,
       "balanced_amount" => @balanced_amount
     }
-    respond_with society_bill_management
+    
+    society_bill_management_data = { 
+      "total_data" => @total_count,
+      "due_status_data" => @due_status_count,
+      "paid_status_data" => @paid_status_count,
+      "confirmed_status_data" => @confirmed_status      
+    }
+    
+    
+     society_bill = {
+       "society_bill_management_count" => society_bill_management_count,
+       "society_bill_management_data" => society_bill_management_data
+     }
+    
+    respond_with society_bill
+  end
+  
+  def my_bill
+    @societyid = 5
+    @buildinno =  10000
+    @finacialyear = "2015-2016"
+    @userid = 4
+    
+    @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ?", @societyid, @finacialyear, @userid, @buildinno)
+
+    @paid = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Paid")
+        
+    @due = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Due")
+
+    @paid_amt = @paid.sum :bill_amt
+    @due_amt = @due.sum :bill_amt
+    @total_amt = @paid_amt +  @due_amt
+    
+      
+    summary = { 
+      "paid_amt" => @paid_amt,
+      "due_amt" => @due_amt,
+      "total_amt" => @total_amt,      
+    }
+    
+    my_society_bill = {
+      "bill_summary" => summary,
+      "bill_detail" => @bill_detail
+    }
+           
+     respond_with my_society_bill
+    
+  end
+  
+  def my_bill_confirmation
+    @bill_id = ""    
+    @payment_mode = ""
+    @ref_no = ""
+    
+    @bill_update = BillStatus.find(@bill_id)
+    @bill_update.payment_mode = @payment_mode
+    @bill_update.reference_no = @ref_no
+    @bill_update.save
+    
   end
   
 
   def import
-    BillStatus.import(params[:file])
-    redirect_to root_url, notice: "Products imported."
+    @user_id = "4"
+    @society_master_id = "5"
+    @month = "jan"
+    @finacial_year = "2015-2016"
+    BillStatus.import(params[:file], @user_id, @society_master_id, @month, @finacial_year)
+    redirect_to root_url, notice: "Products imported." 
+    
   end
 
   def import_excel
@@ -79,6 +143,6 @@ class BillStatusesController < ApplicationController
     end
 
     def bill_status_params
-      params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag, :flat_id, :confirmed_status)
+      params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag, :flat_id, :confirmed_status,:payment_mode,:ref_no)
     end
 end

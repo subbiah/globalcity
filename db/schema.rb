@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823113813) do
+ActiveRecord::Schema.define(version: 20150929172234) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 20150823113813) do
     t.string   "deletion_flag"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "payment_mode"
+    t.string   "ref_no"
   end
 
   create_table "building_masters", force: true do |t|

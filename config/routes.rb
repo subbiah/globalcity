@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   get 'association'  => 'association_masters#all_association'
   
   get 'view_bill' => 'bill_statuses#view_bill'
+  
+   get 'my_bill' => 'bill_statuses#my_bill'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
