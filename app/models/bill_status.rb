@@ -10,6 +10,7 @@ def self.import(file,user_id,soceity_id,month,fy)
   (2..spreadsheet.last_row).each do |i|
     row = Hash[[header, spreadsheet.row(i)].transpose]
     puts row['bill amt']
+
     @bill = BillStatus.new
     row.each do |key, value|
           puts key
@@ -19,14 +20,31 @@ def self.import(file,user_id,soceity_id,month,fy)
           if key == "BillAmount"
             @bill.bill_amt = value
           end
-          
-          @bill.user_id = user_id
-          @bill.society_master_id = soceity_id
-          @bill.month = month
-          @bill.fy = fy
-          @bill.save
-          
+
+          if key == "FlatNo"
+            @bill.flat_id = value
+          end
     end
+      puts ":::::::::::::::::::::::::::::::::::::: begin"
+      @prev_bill = BillStatus.where(:user_id => user_id, :society_master_id => soceity_id, :building_master_id => @bill.building_master_id, :fy => fy, :month => month, :flat_id => @bill.flat_id, :deletion_flag => "CREATED")
+      if @prev_bill != []
+        puts ":::::::::::::::::::::::::::::::::::::::::"
+        puts "previous bill found"
+        puts @prev_bill[0].inspect
+        puts ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+        @prev_bill[0].deletion_flag = "DELETED"
+        @prev_bill[0].save
+      end
+
+      @bill.user_id = user_id
+      @bill.society_master_id = soceity_id
+      @bill.month = month
+      @bill.fy = fy
+      @bill.deletion_flag = "CREATED"
+
+      @bill.save
+
+      puts ":::::::::::::::::::::::::::::::::::::: end"
   end
 end
 

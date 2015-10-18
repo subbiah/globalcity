@@ -1,6 +1,6 @@
 class GclifeRegistrationFlatdetailsController < ApplicationController
   before_action :set_gclife_registration_flatdetail, only: [:show, :edit, :update, :destroy]
-
+  respond_to :html ,:json
   # GET /gclife_registration_flatdetails
   # GET /gclife_registration_flatdetails.json
   def index
@@ -26,15 +26,26 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
   def create
     @gclife_registration_flatdetail = GclifeRegistrationFlatdetail.new(gclife_registration_flatdetail_params)
 
-    respond_to do |format|
-      if @gclife_registration_flatdetail.save
-        format.html { redirect_to @gclife_registration_flatdetail, notice: 'Gclife registration flatdetail was successfully created.' }
-        format.json { render :show, status: :created, location: @gclife_registration_flatdetail }
-      else
-        format.html { render :new }
-        format.json { render json: @gclife_registration_flatdetail.errors, status: :unprocessable_entity }
-      end
+    user = User.find(@gclife_registration_flatdetail.user_id)
+    user.active = "Inactive"
+    user.save(:validate=> false)
+    if @gclife_registration_flatdetail.save
+      respond_with user.user_details, :location => verify_account_path
+    else
+      respond_with nil, :location => verify_account_path
     end
+
+
+
+    # respond_to do |format|
+    #   if @gclife_registration_flatdetail.save
+    #     format.html { redirect_to user.user_details, notice: 'Gclife registration flatdetail was successfully created.' }
+    #     format.json { render :show, status: :created, location: @gclife_registration_flatdetail }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @gclife_registration_flatdetail.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /gclife_registration_flatdetails/1
@@ -69,6 +80,6 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gclife_registration_flatdetail_params
-      params.require(:gclife_registration_flatdetail).permit(:user_id, :gclifeid, :societyid, :buildingid, :ownertypeid, :membertypeid, :relationshipid, :tenurestart, :tenureend)
+      params.require(:gclife_registration_flatdetail).permit(:user_id, :societyid, :buildingid, :ownertypeid, :avenue_name, :flat_number, :flat_type, :tenurestart, :tenureend)
     end
 end

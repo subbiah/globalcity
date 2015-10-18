@@ -17,9 +17,10 @@ class User < ActiveRecord::Base
 
   def user_details
   	user_details = Hash.new
-  	user_details[:user] = self
-  	user_details[:flat_details] = self.gclife_registration_flatdetails
-
+  	#user_details[:user] = self
+  	#user_details[:flat_details] = self.gclife_registration_flatdetails
+    user_details = self.to_json(:include => :gclife_registration_flatdetails)
+    #user_details[:flat_details] = self.gclife_registration_flatdetails
   	return user_details
   end
   # accepts_nested_attributes_for :gclife_registration_flatdetails, :allow_destroy => true

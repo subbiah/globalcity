@@ -23,7 +23,7 @@ class Devise::RegistrationsController < DeviseController
     resource.otp = code.to_s
     resource.active = "Inactive"
     resource.otpflag = "Inactive"
-
+    resource.username = params[:user][:username]
     mobile = resource.mobile
     
 
@@ -39,6 +39,12 @@ class Devise::RegistrationsController < DeviseController
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
         flat_details = params[:user][:gclife_registration_flatdetails]
+
+        # Creating GclifeRegistration 
+        gclifeRegistration = GclifeRegistration.new
+        gclifeRegistration.user_id = resource.id
+        gclifeRegistration.save(:validate => false)
+
         gcFlat = GclifeRegistrationFlatdetail.new
         # gcFlat.create(flat_details)
         gcFlat.societyid = flat_details[:societyid]
@@ -153,9 +159,14 @@ class Devise::RegistrationsController < DeviseController
     User.all.each do |u|
       if user.id != u.id && u.active == "Inactive" && user.gclife_registration_flatdetails[0].societyid == u.gclife_registration_flatdetails[0].societyid && u.member_types[0].priority < user.member_types[0].priority
         users_json = Hash.new
-        users_json['user'] = u
-        users_json['flat_details'] = u.gclife_registration_flatdetails
-        users.push(users_json)
+        users_json = u.user_details
+        # users_json['gclife_registration_flatdetails'] = u.gclife_registration_flatdetails
+        # users_json = user.to_json(:include => :gclife_registration_flatdetails)
+        # puts ":::::::::::::::::::::::::::::::::::::::::::::: user_details"
+        # puts users
+        # puts ":::::::::::::::::::::::::::::::::::::::::::::: user_details"
+
+        users << JSON.parse(users_json)
       end
     end
 

@@ -4,9 +4,12 @@ class BillStatusesController < ApplicationController
   respond_to :html,:json
   
   def view_bill
-    @societyid = 5
-    @fy = "2015-2016"
-    @month = "january"
+
+    @society_master_id = SocietyMaster.find_by_societyname(params[:society_master_id]).id
+
+    @societyid = @society_master_id
+    @fy = params[:fyear]
+    @month = params[:month]
     
     puts "___________________________________"
     
@@ -91,12 +94,18 @@ class BillStatusesController < ApplicationController
   
 
   def import
-    @user_id = "4"
-    @society_master_id = "5"
-    @month = "jan"
-    @finacial_year = "2015-2016"
+    # decoded_file = Base64.decode64(params[:file])
+    # puts StringIO.open(decoded_file)
+
+    @user_id = params[:user_id]
+    @society_master_id = SocietyMaster.find_by_societyname(params[:society_master_id]).id
+    @month = params[:month]
+    @finacial_year = params[:fyear]
     BillStatus.import(params[:file], @user_id, @society_master_id, @month, @finacial_year)
-    redirect_to root_url, notice: "Products imported." 
+    # redirect_to root_url, notice: "Products imported." 
+    response = Hash.new
+    response["success"] = true
+    respond_with response, :location => verify_account_path
     
   end
 
