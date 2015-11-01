@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image url:</strong>
+  <%= @eventimage.image_url %>
+</p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @eventimage.event_id %>
+</p>
+
+<p>
+  <strong>Image type:</strong>
+  <%= @eventimage.image_type %>
+</p>
+
+<%= link_to 'Edit', edit_eventimage_path(@eventimage) %> |
+<%= link_to 'Back', eventimages_path %>

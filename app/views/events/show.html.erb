@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @event.title %>
+</p>
+
+<p>
+  <strong>Sdesc:</strong>
+  <%= @event.sdesc %>
+</p>
+
+<p>
+  <strong>Bdesc:</strong>
+  <%= @event.bdesc %>
+</p>
+
+<p>
+  <strong>Event type:</strong>
+  <%= @event.event_type %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @event.user_id %>
+</p>
+
+<p>
+  <strong>Association:</strong>
+  <%= @event.association_id %>
+</p>
+
+<p>
+  <strong>Society:</strong>
+  <%= @event.society_id %>
+</p>
+
+<%= link_to 'new image', new_eventimage_path(@event) %>
+
+<%= link_to 'Edit', edit_event_path(@event) %> |
+<%= link_to 'Back', events_path %>

@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   
+  resources :eventimages
+
+  resources :events
+
   resources :bill_statuses do
     collection { post :import }
   end
