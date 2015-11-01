@@ -49,10 +49,10 @@ class BillStatusesController < ApplicationController
   end
   
   def my_bill
-    @societyid = 5
-    @buildinno =  10000
-    @finacialyear = "2015-2016"
-    @userid = 4
+    @societyid = params[:society_master_id]
+    @buildinno =  params[:building_no]
+    @finacialyear = params[:fyear]
+    @userid = params[:user_id]
     
     @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ?", @societyid, @finacialyear, @userid, @buildinno)
 
