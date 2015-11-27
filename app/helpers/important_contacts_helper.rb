@@ -1,0 +1,2 @@
+module ImportantContactsHelper
+end
