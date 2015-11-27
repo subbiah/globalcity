@@ -182,7 +182,15 @@ class Devise::RegistrationsController < DeviseController
   end
 
   def search_users
-    respond_with(User.all, :location => verify_account_path)
+    puts "params[search_key]::::::::::::::::::::}"
+    puts params[:search_key].inspect
+
+    if params[:search_key] && params[:search_key].to_s.length > 0
+      users = User.where('username LIKE ?','%'+params[:search_key].to_s+'%')
+    else
+      users = User.all
+    end
+    respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)
   end
 
   def activate_users
