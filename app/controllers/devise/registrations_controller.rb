@@ -181,6 +181,10 @@ class Devise::RegistrationsController < DeviseController
     respond_with(users, :location => verify_account_path)
   end
 
+  def search_users
+    respond_with(User.all, :location => verify_account_path)
+  end
+
   def activate_users
     user = User.find(params[:user_id])
     user.active = params[:status]

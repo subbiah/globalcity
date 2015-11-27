@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     get "get_registered_users", :to => "devise/registrations#get_registered_users"
     get "activate_users", :to => "devise/registrations#activate_users"
     get "user_details", :to => "devise/registrations#user_details"
+    get "search_users", :to => "devise/registrations#search_users"
   end
 
 # Example of regular route:
