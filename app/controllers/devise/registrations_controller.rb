@@ -26,6 +26,13 @@ class Devise::RegistrationsController < DeviseController
     resource.username = params[:user][:username]
     mobile = resource.mobile
     
+    puts "flat number :::::::::::::::::::::::::::::::"
+    puts params[:user][:gclife_registration_flatdetails][:flat_number]
+    if !Flat.where('flat LIKE ?',params[:user][:gclife_registration_flatdetails][:flat_number].to_s+'%').first
+      puts "flat found"
+      respond_with({:errors => {:flat => "Flat number invalid."}}, :location => verify_account_path)
+      return
+    end
 
     resource.save
     
@@ -55,6 +62,7 @@ class Devise::RegistrationsController < DeviseController
         gcFlat.flat_number = flat_details[:flat_number]
         gcFlat.flat_type = flat_details[:flat_type]
         gcFlat.user_id = resource.id
+        gcFlat.status = "Inactive"
 
         from_date = Date.strptime(flat_details[:tenurestart], "%d-%m-%Y")
         to_date = Date.strptime(flat_details[:tenureend], "%d-%m-%Y")
@@ -71,8 +79,8 @@ class Devise::RegistrationsController < DeviseController
         # puts resource.gclife_registration_flatdetails.inspect
 
         #role creation information
-        members = ["Member","Committee_member","Secretary","Chairman","Treasurer","Non_members"]
-        roles = ["societyuser","societyadmin","associationadmin","associationmember","superadmin","Non_members"]
+        members = ["Non_members","Member","Committee_member","Secretary","Chairman","Treasurer"]
+        roles = ["Non_members","societyuser","societyadmin","associationadmin","associationmember","superadmin"]
 
         member_type = MemberType.new
         member_type.member_type = flat_details[:member_type]
@@ -157,7 +165,7 @@ class Devise::RegistrationsController < DeviseController
     puts user.member_types.inspect
     users = Array.new
     User.all.each do |u|
-      if user.id != u.id && u.active == "Inactive" && user.gclife_registration_flatdetails[0].societyid == u.gclife_registration_flatdetails[0].societyid && u.member_types[0].priority < user.member_types[0].priority
+      if (user.id != u.id && u.active == "Inactive" && user.member_types[0].priority == 5) || (user.id != u.id && u.active == "Inactive" && user.gclife_registration_flatdetails[0].societyid == u.gclife_registration_flatdetails[0].societyid && u.member_types[0].priority < user.member_types[0].priority)
         users_json = Hash.new
         users_json = u.user_details
         # users_json['gclife_registration_flatdetails'] = u.gclife_registration_flatdetails
@@ -177,7 +185,20 @@ class Devise::RegistrationsController < DeviseController
     user = User.find(params[:user_id])
     user.active = params[:status]
     user.save(:validate=>false)
+
+    user.gclife_registration_flatdetails.each do |flat|
+      if flat.status = "Inactive"
+        flat.status = "Active"
+        flat.save
+      end
+    end
+
     respond_with(user, :location => verify_account_path)
+  end
+
+  def user_details
+    user = User.find(params[:user_id])
+    respond_with(user.user_details, :location => verify_account_path)
   end
 
   # PUT /resource

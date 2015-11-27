@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     get "resend_otp", :to => "devise/registrations#resend_otp"
     get "get_registered_users", :to => "devise/registrations#get_registered_users"
     get "activate_users", :to => "devise/registrations#activate_users"
+    get "user_details", :to => "devise/registrations#user_details"
   end
 
 # Example of regular route:

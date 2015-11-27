@@ -1,10 +1,16 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
 
-  respond_to :html
+  respond_to :html, :json
 
   def index
-    @events = Event.all
+    # @events = Event.all
+    @events = Array.new
+    if params[:event_type]
+      puts "Insede if :::::::::::::::::::: #{params[:event_type]}"
+      @events = Event.all.where(:event_type => params[:event_type]).reverse
+    end
+
     respond_with(@events)
   end
 
@@ -23,7 +29,22 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new(event_params)
+
+    puts "Processing images ::::::::::::::::::::"
+    puts params[:event][:EventImages]
+    
     @event.save
+
+    if params[:event][:EventImages]
+      params[:event][:EventImages].each do |image|
+        eventImage = Eventimage.new
+        eventImage.event_id = @event.id
+        eventImage.image_url = image[:image_url]
+        eventImage.image_type = image[:image_type]
+        eventImage.save
+      end
+    end
+
     respond_with(@event)
   end
 
@@ -43,6 +64,6 @@ class EventsController < ApplicationController
     end
 
     def event_params
-      params.require(:event).permit(:title, :sdesc, :bdesc, :event_type, :user_id, :association_id, :society_id)
+      params.require(:event).permit(:title, :sdesc, :bdesc, :event_type, :user_id, :association_id, :society_id, :member_type, :association_name,:society_name, :EventImages)
     end
 end

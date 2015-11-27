@@ -26,6 +26,15 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
   def create
     @gclife_registration_flatdetail = GclifeRegistrationFlatdetail.new(gclife_registration_flatdetail_params)
 
+    puts "flat number :::::::::::::::::::::::::::::::"
+    puts gclife_registration_flatdetail_params[:flat_number]
+    if !Flat.where('flat LIKE ?',gclife_registration_flatdetail_params[:flat_number].to_s+'%').first
+      puts "flat not found"
+      respond_with({:errors => {:flat => "Flat number invalid."}}, :location => verify_account_path)
+      return
+    end
+
+    @gclife_registration_flatdetail.status = "Inactive"
     user = User.find(@gclife_registration_flatdetail.user_id)
     user.active = "Inactive"
     user.save(:validate=> false)

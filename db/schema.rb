@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151011053248) do
+ActiveRecord::Schema.define(version: 20151109173437) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -56,6 +56,29 @@ ActiveRecord::Schema.define(version: 20151011053248) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "society_master_id"
+  end
+
+  create_table "eventimages", force: true do |t|
+    t.string   "image_url"
+    t.integer  "event_id"
+    t.string   "image_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", force: true do |t|
+    t.string   "title"
+    t.string   "sdesc"
+    t.string   "bdesc"
+    t.string   "event_type"
+    t.integer  "user_id"
+    t.integer  "association_id"
+    t.integer  "society_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "member_type"
+    t.string   "association_name"
+    t.string   "society_name"
   end
 
   create_table "flats", force: true do |t|
