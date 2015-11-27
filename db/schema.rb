@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127174409) do
+ActiveRecord::Schema.define(version: 20151127193632) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -150,6 +150,18 @@ ActiveRecord::Schema.define(version: 20151127174409) do
     t.string   "activeflag"
     t.integer  "priority"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "messages", force: true do |t|
+    t.integer  "from_user_id"
+    t.integer  "to_user_id"
+    t.string   "subject"
+    t.string   "sender_name"
+    t.string   "receiver_name"
+    t.text     "message"
+    t.string   "read"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -181,6 +181,15 @@ class Devise::RegistrationsController < DeviseController
     respond_with(users, :location => verify_account_path)
   end
 
+  def all_users
+    user_names = Array.new
+    User.all.each do |u|
+      user_names << u.username
+    end
+
+    respond_with(user_names, :location => verify_account_path)
+  end
+
   def search_users
     puts "params[search_key]::::::::::::::::::::}"
     puts params[:search_key].inspect

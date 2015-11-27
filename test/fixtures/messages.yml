@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from_user_id: 1
+  to_user_id: 1
+  subject: MyString
+  message: MyText
+  read: MyString
+
+two:
+  from_user_id: 1
+  to_user_id: 1
+  subject: MyString
+  message: MyText
+  read: MyString

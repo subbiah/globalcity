@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  resources :messages
+
   resources :eventimages
 
   resources :events
@@ -59,6 +61,7 @@ Rails.application.routes.draw do
     get "activate_users", :to => "devise/registrations#activate_users"
     get "user_details", :to => "devise/registrations#user_details"
     get "search_users", :to => "devise/registrations#search_users"
+    get "all_users", :to => "devise/registrations#all_users"
   end
 
 # Example of regular route:
