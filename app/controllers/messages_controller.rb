@@ -2,6 +2,7 @@ class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :edit, :update, :destroy]
 
   respond_to :json, :html
+  require 'gcm'
 
   def index
 
@@ -12,6 +13,39 @@ class MessagesController < ApplicationController
     end
     # @messages = Message.all
     respond_with(@messages)
+  end
+  
+  def msg_notification
+    
+    
+  end
+  
+  def post_msg_notification
+    puts "======================================"
+    puts @token = params[:device_token]
+    puts @msg = params[:msg]
+    puts "-------------------------------------"  
+    
+    
+      # GCM.host = 'https://android.googleapis.com/gcm/send'
+         # GCM.format = :json
+         # GCM.key = "AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY"
+         # contact_name = ""
+         # # if user.profile && user.profile.username
+           # # contact_name = user.profile.username
+         # # else
+           # # contact_name = user.username
+         # # end
+         # data = { :message => "msg notification"}
+         # destination = [@token]
+         # GCM.send_notification( destination, data )  
+
+    gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+    registration_ids= [@token] # an array of one or more client registration IDs
+    options = {data: {msg: @msg}, collapse_key: "updated_score"}
+    response = gcm.send(registration_ids, options)
+    
+    puts response
   end
 
   def show

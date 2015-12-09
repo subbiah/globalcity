@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   
   resources :messages
+  
+  get 'msg_notification'  => 'messages#msg_notification'
+  
+  post 'post_msg_notification'  => 'messages#post_msg_notification'
 
   resources :eventimages
 
