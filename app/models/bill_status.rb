@@ -40,6 +40,7 @@ def self.import(file,user_id,soceity_id,month,fy)
       @bill.society_master_id = soceity_id
       @bill.month = month
       @bill.fy = fy
+      @bill.status = "Due"
       @bill.deletion_flag = "CREATED"
 
       @bill.save

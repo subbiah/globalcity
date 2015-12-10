@@ -217,6 +217,32 @@ class Devise::RegistrationsController < DeviseController
     respond_with(user, :location => verify_account_path)
   end
 
+  def update_user
+    user = User.find(params[:user_id])
+    puts "user found ::::::::::::::::::::::::"
+    puts user.inspect
+
+    if user.email != params[:email]
+      if User.where(:email=>params[:email]) != []
+        respond_with({:errors => "email already exits"}, :location => verify_account_path)
+        return
+      end
+    end
+
+    user.email = params[:email]
+    user.username = params[:username]
+    user.mobile = params[:mobile]
+    user.gender = params[:gender]
+    user.emergency_contct_no = params[:emergency_contct_no]
+    user.occupation = params[:occupation]
+    user.dob = params[:dob]
+    user.privacy = params[:privacy]
+
+    user.save(:validate=>false)
+
+    respond_with(user.user_details, :location => verify_account_path)
+  end
+
   def user_details
     user = User.find(params[:user_id])
     respond_with(user.user_details, :location => verify_account_path)

@@ -13,13 +13,17 @@ class BillStatusesController < ApplicationController
     
     puts "___________________________________"
     
-    @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ?", @societyid, @fy, @month)
-    @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due")
-    @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Paid")
-    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed")
-    @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =?", @societyid, @fy, @month, "Due").to_a.sum(&:bill_amt)
-    @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND confirmed_status =?", @societyid, @fy, @month, "Confirmed").to_a.sum(&:bill_amt)
+    @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND deletion_flag = ?", @societyid, @fy, @month, "CREATED")
+    @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Due", "CREATED")
+    @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Paid", "CREATED")
+    @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED")
+    @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Due", "CREATED").to_a.sum(&:bill_amt)
+    @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED").to_a.sum(&:bill_amt)
     
+    puts ":::::::::::::::: confirmed_amount"
+    puts @confirmed_amount.inspect
+    puts ":::::::::::::::: confirmed_amount"
+
     @balanced_amount = @due_amount - @confirmed_amount
      
     society_bill_management_count = { 
@@ -49,7 +53,11 @@ class BillStatusesController < ApplicationController
   end
   
   def my_bill
-    @societyid = params[:society_master_id]
+    # @societyid = params[:society_master_id]
+
+    @society_master_id = SocietyMaster.find_by_societyname(params[:society_master_id]).id
+
+    @societyid = @society_master_id
     @buildinno =  params[:building_no]
     @finacialyear = params[:fyear]
     @userid = params[:user_id]
@@ -81,17 +89,39 @@ class BillStatusesController < ApplicationController
   end
   
   def my_bill_confirmation
-    @bill_id = ""    
-    @payment_mode = ""
-    @ref_no = ""
+    @bill_id = params[:bill_id]   
+    @payment_mode = params[:payment_mode]
+    @ref_no = params[:ref_no]
     
     @bill_update = BillStatus.find(@bill_id)
     @bill_update.payment_mode = @payment_mode
-    @bill_update.reference_no = @ref_no
+    @bill_update.ref_no = @ref_no
+    @bill_update.status = "Paid"
     @bill_update.save
+
+    respond_with @bill_update
     
   end
-  
+
+  def confirm_bill
+    billStatus = BillStatus.find(params[:bill_id])
+
+    if params[:confirmed_status] == "Paid"
+      billStatus.status = "Confirmed"
+      billStatus.payment_mode = params[:payment_mode]
+      billStatus.ref_no = params[:ref_no]
+      billStatus.confirmed_status = params[:confirmed_status]
+    else
+      billStatus.status = "Paid"
+      billStatus.payment_mode = params[:payment_mode]
+      billStatus.ref_no = params[:ref_no]
+      billStatus.confirmed_status = params[:confirmed_status]
+    end
+
+    billStatus.save
+
+    respond_with billStatus
+  end
 
   def import
     # decoded_file = Base64.decode64(params[:file])

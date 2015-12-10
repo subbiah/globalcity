@@ -22,8 +22,10 @@ class MessagesController < ApplicationController
   
   def post_msg_notification
     puts "======================================"
+    puts @tittle = params[:tittle]
     puts @token = params[:device_token]
     puts @msg = params[:msg]
+    puts @category = params[:category]
     puts "-------------------------------------"  
     
     
@@ -42,7 +44,7 @@ class MessagesController < ApplicationController
 
     gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
     registration_ids= [@token] # an array of one or more client registration IDs
-    options = {data: {msg: @msg}, collapse_key: "updated_score"}
+    options = {data: {tittle: @tittle, message: @msg, category: @category}, collapse_key: "updated_score"}
     response = gcm.send(registration_ids, options)
     
     puts response

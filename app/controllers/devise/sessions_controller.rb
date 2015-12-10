@@ -4,6 +4,8 @@ class Devise::SessionsController < DeviseController
   prepend_before_filter :verify_signed_out_user, only: :destroy
   prepend_before_filter only: [:create, :destroy] { request.env["devise.skip_timeout"] = true }
 
+  require 'gcm'
+
   skip_before_filter :verify_authenticity_token
   respond_to :html ,:json
   
@@ -17,9 +19,29 @@ class Devise::SessionsController < DeviseController
 
   # POST /resource/sign_in
   def create
+    puts "device_token ::::::::::::::::::::::::::::::"
+    puts params[:user][:device_token].inspect
+
     self.resource = warden.authenticate!(auth_options)
     set_flash_message(:notice, :signed_in) if is_flashing_format?
     sign_in(resource_name, resource)
+
+    puts "got the user :::::::::::::::::::::"
+    puts resource.inspect
+
+    if params[:user][:device_token]
+      resource.device_token = params[:user][:device_token]
+      resource.save(:validate => false)
+
+      gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+      registration_ids= [resource.device_token] # an array of one or more client registration IDs
+      options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}
+      response = gcm.send(registration_ids, options)
+    
+      puts response
+
+    end
+
     yield resource if block_given?
     respond_with resource.user_details, location: after_sign_in_path_for(resource)
   end

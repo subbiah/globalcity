@@ -7,9 +7,9 @@ class ApplicationController < ActionController::Base
   skip_before_filter :verify_authenticity_token
   
   def configure_permitted_parameters
-  devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :username, :otp, :otpflag, :active, :mobile, gclife_registration_flatdetails: []) }
+  devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :username, :otp, :otpflag, :active, :device_token, :mobile, gclife_registration_flatdetails: []) }
   devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:email, :password) }
-  devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :username, :otp, :otpflag, :active, :mobile, gclife_registration_flatdetails: []) }
+  devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :username, :otp, :otpflag, :active, :device_token, :mobile, gclife_registration_flatdetails: []) }
   end
   
   def sms

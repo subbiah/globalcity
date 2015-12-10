@@ -1,8 +1,12 @@
-<p>msg</p>
 
 <%= form_tag post_msg_notification_path do %>
+<p>tittle</p>
+<%= text_field_tag :tittle, params[:tittle] %> 
+<p>device_token</p>
 <%= text_field_tag :device_token, params[:device_token] %> 
+<p>category</p>
 <%= text_field_tag :category, params[:category] %> 
-<%= text_field_tag :msg, params[:msg] %> 
+<p>msg</p>
+<%= text_field_tag :msg, params[:msg] %> <br>
 <%= submit_tag "Send" %>  
 <%end%>
