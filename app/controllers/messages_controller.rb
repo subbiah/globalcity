@@ -76,11 +76,11 @@ class MessagesController < ApplicationController
 
     if to_users != []
       to_users.each do |name|
-        user = User.find_by_username(name)
+        user = User.find_by_email(name)
 
         @message = Message.new(message_params)
         @message.to_user_id = user.id
-        @message.sender_name = from_user.username
+        @message.sender_name = from_user.email
         @message.receiver_name = name
         @message.save
       end

@@ -184,7 +184,7 @@ class Devise::RegistrationsController < DeviseController
   def all_users
     user_names = Array.new
     User.all.each do |u|
-      user_names << u.username
+      user_names << u.email
     end
 
     respond_with(user_names, :location => verify_account_path)

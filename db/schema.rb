@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210190319) do
+ActiveRecord::Schema.define(version: 20151217184438) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -56,6 +56,22 @@ ActiveRecord::Schema.define(version: 20151210190319) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "society_master_id"
+  end
+
+  create_table "event_comments", force: true do |t|
+    t.integer  "event_id"
+    t.integer  "user_id"
+    t.string   "username"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_likes", force: true do |t|
+    t.integer  "event_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "eventimages", force: true do |t|

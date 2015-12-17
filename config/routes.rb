@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   
+  resources :event_likes
+
+  resources :event_comments
+
   resources :messages
   
   get 'msg_notification'  => 'messages#msg_notification'
@@ -66,6 +70,7 @@ Rails.application.routes.draw do
     get "user_details", :to => "devise/registrations#user_details"
     get "search_users", :to => "devise/registrations#search_users"
     get "all_users", :to => "devise/registrations#all_users"
+    post "update_user", :to => "devise/registrations#update_user"
   end
 
 # Example of regular route:

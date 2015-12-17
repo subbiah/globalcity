@@ -1,0 +1,27 @@
+<h1>Listing event_likes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @event_likes.each do |event_like| %>
+      <tr>
+        <td><%= event_like.event_id %></td>
+        <td><%= event_like.user_id %></td>
+        <td><%= link_to 'Show', event_like %></td>
+        <td><%= link_to 'Edit', edit_event_like_path(event_like) %></td>
+        <td><%= link_to 'Destroy', event_like, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Event like', new_event_like_path %>
