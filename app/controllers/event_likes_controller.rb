@@ -24,7 +24,7 @@ class EventLikesController < ApplicationController
     @event_like = EventLike.new(event_like_params)
     puts ":::::::::::::::::::::::::::: user_id"
     puts event_like_params[:user_id]
-    if EventLike.find_by_user_id(event_like_params[:user_id])
+    if EventLike.find_by_user_id_and_event_id(event_like_params[:user_id],event_like_params[:event_id])
       respond_with({:errors => "user not found"}, :location => verify_account_path)
       return
     end

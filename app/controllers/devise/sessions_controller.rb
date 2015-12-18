@@ -33,12 +33,14 @@ class Devise::SessionsController < DeviseController
       resource.device_token = params[:user][:device_token]
       resource.save(:validate => false)
 
-      gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
-      registration_ids= [resource.device_token] # an array of one or more client registration IDs
-      options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}
-      response = gcm.send(registration_ids, options)
+      # send_notification(tittle, message, id, category)
+      resource.send_notification("GCLife", "New device", "", "Login")
+      # gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+      # registration_ids= [resource.device_token] # an array of one or more client registration IDs
+      # options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}
+      # response = gcm.send(registration_ids, options)
     
-      puts response
+      # puts response
 
     end
 

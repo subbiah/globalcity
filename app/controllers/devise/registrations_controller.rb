@@ -207,6 +207,10 @@ class Devise::RegistrationsController < DeviseController
     user.active = params[:status]
     user.save(:validate=>false)
 
+    # sending notification
+    # send_notification(tittle, message, id, category)
+    user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
+
     user.gclife_registration_flatdetails.each do |flat|
       if flat.status = "Inactive"
         flat.status = "Active"

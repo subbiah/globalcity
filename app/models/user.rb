@@ -25,4 +25,13 @@ class User < ActiveRecord::Base
   end
   # accepts_nested_attributes_for :gclife_registration_flatdetails, :allow_destroy => true
   
+  def send_notification(tittle, message, id, category)
+    gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+    registration_ids= [self.device_token] # an array of one or more client registration IDs
+    options = {data: {tittle: tittle, message: message, category: category, event: id}, collapse_key: "updated_score"}
+    response = gcm.send(registration_ids, options)
+  
+    puts response
+  end
+
 end

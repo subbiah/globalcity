@@ -26,6 +26,7 @@ class MessagesController < ApplicationController
     puts @token = params[:device_token]
     puts @msg = params[:msg]
     puts @category = params[:category]
+    puts @event = params[:event]
     puts "-------------------------------------"  
     
     
@@ -44,7 +45,7 @@ class MessagesController < ApplicationController
 
     gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
     registration_ids= [@token] # an array of one or more client registration IDs
-    options = {data: {tittle: @tittle, message: @msg, category: @category}, collapse_key: "updated_score"}
+    options = {data: {tittle: @tittle, message: @msg, category: @category, event: @event}, collapse_key: "updated_score"}
     response = gcm.send(registration_ids, options)
     
     puts response
@@ -83,6 +84,11 @@ class MessagesController < ApplicationController
         @message.sender_name = from_user.email
         @message.receiver_name = name
         @message.save
+
+        # sending notification
+        # send_notification(tittle, message, id, category)
+        user.send_notification("GCLife - Inbox", "#{from_user.username} sent an Inbox message", "", "Inbox")
+
       end
     end
 
