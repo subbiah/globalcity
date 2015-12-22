@@ -29,6 +29,14 @@ class EventLikesController < ApplicationController
       return
     end
     @event_like.save
+
+    @event = Event.find(@event_like.event_id)
+    user = User.find(@event.user_id)
+
+    if @event_like.user_id != user.id
+      user.send_notification("GCLife", "#{user.username} Liked on your post", @event.id, "#{@event.event_type}")
+    end
+
     respond_with(@event_like)
   end
 

@@ -12,6 +12,7 @@ class MessagesController < ApplicationController
       @messages = Message.where(:to_user_id => params[:user_id].to_i)
     end
     # @messages = Message.all
+    @messages = @messages.reverse
     respond_with(@messages)
   end
   
