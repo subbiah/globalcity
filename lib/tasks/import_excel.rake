@@ -5,9 +5,9 @@ task :readExcel => :environment do
 
   puts"read excel"
 
-  # s = Roo::Spreadsheet.open('/DataCreation.xls', extension: :xls)
+  # s = Roo::Spreadsheet.open('/DataCreation27122015.xls', extension: :xls)
 
-  xlsx = Roo::Excel.new("public/DataCreation.xls")
+  xlsx = Roo::Excel.new("public/DataCreation27122015.xls")
 
   xlsx.each_with_pagename do |name, sheet|
     lastrow = sheet.last_row
