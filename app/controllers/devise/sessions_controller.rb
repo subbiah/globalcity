@@ -34,7 +34,7 @@ class Devise::SessionsController < DeviseController
       resource.save(:validate => false)
 
       # send_notification(tittle, message, id, category)
-      resource.send_notification("GCLife", "New device", "", "Login")
+      # resource.send_notification("GCLife", "New device", "", "Login")
       # gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
       # registration_ids= [resource.device_token] # an array of one or more client registration IDs
       # options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}

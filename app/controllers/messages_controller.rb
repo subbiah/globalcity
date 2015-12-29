@@ -88,7 +88,7 @@ class MessagesController < ApplicationController
 
         # sending notification
         # send_notification(tittle, message, id, category)
-        user.send_notification("GCLife - Inbox", "#{from_user.username} sent an Inbox message", "", "Inbox")
+        user.send_notification("GCLife - ", "Mail from #{from_user.username}", "", "Inbox")
 
       end
     end

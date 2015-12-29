@@ -53,6 +53,10 @@ Rails.application.routes.draw do
   
    get 'my_bill' => 'bill_statuses#my_bill'
 
+   get 'my_bill_confirmation' => 'bill_statuses#my_bill_confirmation'
+
+   get 'confirm_bill' => 'bill_statuses#confirm_bill'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
