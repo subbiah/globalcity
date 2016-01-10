@@ -12,7 +12,7 @@ task :impcont => :environment do
     (2..lastrow).each do |row|
      imcont = ImportantContact.new
       sheet.row(row).each_with_index do |a, index|
-        if index == 3
+        if index == 0
        imcont.name =  a.to_s
         elsif index == 1
          imcont.phno = a.to_s
