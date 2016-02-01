@@ -45,6 +45,15 @@ class EventsController < ApplicationController
       end
     end
 
+    user = User.find(@event.user_id)
+    # if @event.event_type == "Notice"
+      User.all.each do |u|
+        if user.id != u.id
+          u.send_notification("GCLife", "#{user.username} posted #{@event.event_type}", @event.id, "#{@event.event_type}")
+        end
+       end
+    # end
+
     respond_with(@event)
   end
 

@@ -61,6 +61,7 @@ class BillStatusesController < ApplicationController
     @buildinno =  params[:building_no]
     @finacialyear = params[:fyear]
     @userid = params[:user_id]
+    user = User.find(@userid)
     
     # @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ?", @societyid, @finacialyear, @userid, @buildinno)
 
@@ -80,18 +81,52 @@ class BillStatusesController < ApplicationController
     @total_amt = @paid_amt +  @due_amt
     
       
-    summary = { 
-      "paid_amt" => @paid_amt,
-      "due_amt" => @due_amt,
-      "total_amt" => @total_amt,      
-    }
+    # summary = { 
+    #   "paid_amt" => @paid_amt,
+    #   "due_amt" => @due_amt,
+    #   "total_amt" => @total_amt,      
+    # }
     
+    @updated_bils = Array.new
+    @bill_detail.each do |bill|
+      user.gclife_registration_flatdetails.each do |flat|
+        puts "flat details :::::: #{flat.flat_number.to_i}"
+        puts "bil flat details :::::: #{bill.flat_id}"
+        if flat.flat_number.to_i == bill.flat_id
+          @updated_bils << bill
+        end
+      end
+    end
+
+    paid = 0
+    due = 0
+    total = 0
+    @updated_bils.each do |bil|
+      if bil.status == "Paid"
+        paid = paid + bil.bill_amt
+      end
+      if bil.status == "Due"
+        due = due + bil.bill_amt
+      end
+    end
+
+    total = paid + due
+
+    summary = { 
+      "paid_amt" => paid,
+      "due_amt" => due,
+      "total_amt" => total,      
+    }
+
+    puts "summary ::::::::::: #{summary.inspect}"
+
     my_society_bill = {
       "bill_summary" => summary,
-      "bill_detail" => @bill_detail
+      # "bill_detail" => @bill_detail
+      "bill_detail" => @updated_bils
     }
-           
-     respond_with my_society_bill
+
+    respond_with my_society_bill
     
   end
   

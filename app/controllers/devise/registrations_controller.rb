@@ -194,6 +194,11 @@ class Devise::RegistrationsController < DeviseController
     puts "params[search_key]::::::::::::::::::::}"
     puts params[:search_key].inspect
     
+    puts params[:avenue_name].inspect
+    puts params[:socity_name].inspect
+    puts params[:buildingno].inspect
+    puts params[:flat_no].inspect
+
     @associationanme = params[:avenue_name]
     @societyname = params[:socity_name]
     @buildno = params[:buildingno]
@@ -208,14 +213,16 @@ class Devise::RegistrationsController < DeviseController
     if params[:search_key] && params[:search_key].to_s.length > 0
       users = User.where('username LIKE ?','%'+params[:search_key].to_s+'%')
     else  
-      gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
-      @userarray = []
-      gcusers.each do |gcuser|
-        userdata = User.find(gcuser.user_id)
-        @userarray << userdata
-      end
+      # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
+      # @userarray = []
+      # gcusers.each do |gcuser|
+      #   userdata = User.find(gcuser.user_id)
+      #   @userarray << userdata
+      # end
       
-      users = @userarray
+      # users = @userarray
+
+      users = User.all
       
     end
     respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)
