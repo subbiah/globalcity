@@ -8,6 +8,9 @@ class Devise::RegistrationsController < DeviseController
 
   # GET /resource/sign_up
   def new
+    
+     UserMailer.user_email().deliver
+     
     build_resource({})
     set_minimum_password_length
     yield resource if block_given?
