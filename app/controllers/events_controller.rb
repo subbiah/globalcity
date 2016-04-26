@@ -6,9 +6,17 @@ class EventsController < ApplicationController
   def index
     # @events = Event.all
     @events = Array.new
-    if params[:event_type]
+    puts "search text ::::::::::::::::::::::::"
+    puts params[:search_text] 
+    if params[:search_text]
+      if params[:event_type]
+      @events = Event.all.where('title LIKE ? AND event_type = ?','%'+params[:search_text]+'%', params[:event_type]).reverse
+    end
+    else
+      if params[:event_type]
       puts "Insede if :::::::::::::::::::: #{params[:event_type]}"
       @events = Event.all.where(:event_type => params[:event_type]).reverse
+    end
     end
 
     respond_with(@events)

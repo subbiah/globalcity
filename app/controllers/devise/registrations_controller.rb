@@ -18,6 +18,18 @@ class Devise::RegistrationsController < DeviseController
   def create
     build_resource(sign_up_params)
 
+    user = User.where('email = ? OR mobile = ?', params[:user][:email], params[:user][:mobile]).first
+    puts ":::::::::::::::::::: previous user details"
+    puts user.inspect
+    puts "::::::::::::::::::::::::::::"
+
+    if user && user.active == 'Reject'
+      user.active = "Inactive"
+      user.save(:validate => false)
+      respond_with user.user_details, location: after_sign_up_path_for(resource)
+      return
+    end
+
     puts "::::::::::::::::::::::::::::::: before User cration...."
     code = rand(10000..99999)
     resource.otp = code.to_s
@@ -235,12 +247,14 @@ class Devise::RegistrationsController < DeviseController
 
     # sending notification
     # send_notification(tittle, message, id, category)
-    user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
+    if params[:status] == 'Approve'
+      user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
 
-    user.gclife_registration_flatdetails.each do |flat|
-      if flat.status = "Inactive"
-        flat.status = "Active"
-        flat.save
+      user.gclife_registration_flatdetails.each do |flat|
+        if flat.status = "Inactive"
+          flat.status = "Active"
+          flat.save
+        end
       end
     end
 
@@ -267,6 +281,7 @@ class Devise::RegistrationsController < DeviseController
     user.occupation = params[:occupation]
     user.dob = params[:dob]
     user.privacy = params[:privacy]
+    user.profile_url = params[:profile_url]
 
     user.save(:validate=>false)
 

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  apipie
   resources :event_likes
 
   resources :event_comments
