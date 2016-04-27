@@ -7,9 +7,9 @@ class MessagesController < ApplicationController
   def index
 
     if params[:type] == "sent"
-      @messages = Message.where(:from_user_id => params[:user_id].to_i)
+      @messages = Message.where(:from_user_id => params[:user_id].to_i, :from_user_delete_flag => false)
     else
-      @messages = Message.where(:to_user_id => params[:user_id].to_i)
+      @messages = Message.where(:to_user_id => params[:user_id].to_i, :to_user_delete_flag => false)
     end
     # @messages = Message.all
     @messages = @messages.reverse
@@ -84,6 +84,9 @@ class MessagesController < ApplicationController
         @message.to_user_id = user.id
         @message.sender_name = from_user.email
         @message.receiver_name = name
+        @message.from_user_delete_flag = false
+        @message.to_user_delete_flag = false
+
         @message.save
 
         # sending notification
@@ -104,7 +107,14 @@ class MessagesController < ApplicationController
   end
 
   def destroy
-    @message.destroy
+    # @message.destroy
+    if params[:user_id]
+      if params[:user_id].to_i == @message.to_user_id
+        @message.to_user_delete_flag = true
+      else
+        @message.from_user_delete_flag = true
+      end
+    end
     respond_with(@message)
   end
 

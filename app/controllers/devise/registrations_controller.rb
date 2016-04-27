@@ -223,7 +223,7 @@ class Devise::RegistrationsController < DeviseController
     conditions[:flat_number] = @flatno unless @flatno.blank?
 
     if params[:search_key] && params[:search_key].to_s.length > 0
-      users = User.where('username LIKE ?','%'+params[:search_key].to_s+'%')
+      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve")
     else  
       # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
       # @userarray = []
@@ -234,7 +234,7 @@ class Devise::RegistrationsController < DeviseController
       
       # users = @userarray
 
-      users = User.all
+      users = User.all.where(:active => "Approve")
       
     end
     respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)

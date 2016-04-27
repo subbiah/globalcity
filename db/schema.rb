@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404182150) do
+ActiveRecord::Schema.define(version: 20160426193732) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 20160404182150) do
     t.string   "read"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "from_user_delete_flag"
+    t.boolean  "to_user_delete_flag"
   end
 
   create_table "role_types", force: true do |t|
