@@ -9,7 +9,7 @@ class Devise::RegistrationsController < DeviseController
   # GET /resource/sign_up
   def new
     
-     UserMailer.user_email().deliver
+    # UserMailer.user_email().deliver
      
     build_resource({})
     set_minimum_password_length
@@ -42,9 +42,11 @@ class Devise::RegistrationsController < DeviseController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code-#{code}&")
+        UserMailer.user_email(resource).deliver
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code}&,Pls. contact society office for verification and approval.")
         req = Net::HTTP.get(uri)
-        puts req #show result
+        puts req #show result        
+        # UserMailer.user_email(resource).deliver
 
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
@@ -130,6 +132,11 @@ class Devise::RegistrationsController < DeviseController
       puts "User_activation_code:::::#{user.otp.inspect}"
       if user.otp == params[:otp].to_s
         user.update_attribute(:otpflag, "Verified")
+        
+        # UserMailer.user_accept().deliver
+        # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code-#{code}&")
+        # req = Net::HTTP.get(uri)
+        
         # user.update_attribute(:otp, nil)
         #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
         #UserMailer.welcome_olamundo(user, nil, nil).deliver
@@ -210,6 +217,7 @@ class Devise::RegistrationsController < DeviseController
 
     if params[:search_key] && params[:search_key].to_s.length > 0
       users = User.where('username LIKE ?','%'+params[:search_key].to_s+'%')
+      # users = User.where('username LIKE ? AND active= ?' ,'%'+params[:search_key].to_s+'%',"active")
     else  
       gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
       @userarray = []
@@ -228,6 +236,10 @@ class Devise::RegistrationsController < DeviseController
     user = User.find(params[:user_id])
     user.active = params[:status]
     user.save(:validate=>false)
+    
+   
+    
+    
 
     # sending notification
     # send_notification(tittle, message, id, category)
@@ -237,6 +249,15 @@ class Devise::RegistrationsController < DeviseController
       if flat.status = "Inactive"
         flat.status = "Active"
         flat.save
+        scname = SocietyMasters.find(flat.societyid)
+         if user.active == 'Approved'
+           UserMailer.user_accept(user, flat, scname).deliver          
+        end
+        
+        if user.active == 'Rejected'
+          UserMailer.user_reject(user, flat, scname).deliver        
+       end
+        
       end
     end
 

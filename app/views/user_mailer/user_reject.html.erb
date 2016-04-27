@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+	</head>
+	<body>
+		<h2>Dear  <%= @user.name %>;</h2>
+
+		Your membership registration request for below flat details has been rejected by the society admin
+
+		team.
+
+		Flat Detail and Approval status:
+
+		Avenue <%= @user.avenuename %>
+
+		Society Name <%= @user.SocietyName %> 
+
+		Building Name <%= @user.BuildingName %>   
+
+		Flat Detail <%= @user.FlatNumber %>  
+
+		Owner Type <%= @user.Ownertype %>   
+
+		Member Type <%= @user.Membertype %>   
+
+		Rejection Reason <%= @user.reason %>   
+
+		Rejected Date and Time  <%= @user.date %>
+	</body>
+</html>
