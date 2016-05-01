@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160426193732) do
+=======
+ActiveRecord::Schema.define(version: 20160311175641) do
+>>>>>>> globalcity-test
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -151,6 +155,7 @@ ActiveRecord::Schema.define(version: 20160426193732) do
     t.datetime "avatar_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "important_contacts", force: true do |t|

@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :gclife_registration_flatdetails
   has_many :role_type
   has_many :member_types
+   has_one :image
 
   def user_details
   	user_details = Hash.new
