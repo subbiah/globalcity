@@ -36,8 +36,8 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     @gclife_registration_flatdetail.status = "Inactive"
     user = User.find(@gclife_registration_flatdetail.user_id)
-    user.active = "Inactive"
-    user.save(:validate=> false)
+    # user.active = "Inactive"
+    # user.save(:validate=> false)
     if @gclife_registration_flatdetail.save
       respond_with user.user_details, :location => verify_account_path
     else

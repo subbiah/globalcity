@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160426193732) do
-=======
-ActiveRecord::Schema.define(version: 20160311175641) do
->>>>>>> globalcity-test
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"

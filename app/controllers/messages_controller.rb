@@ -114,6 +114,7 @@ class MessagesController < ApplicationController
       else
         @message.from_user_delete_flag = true
       end
+      @message.save
     end
     respond_with(@message)
   end
