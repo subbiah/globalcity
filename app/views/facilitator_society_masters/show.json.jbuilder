@@ -1,0 +1,1 @@
+json.extract! @facilitator_society_master, :id, :society_id, :category, :facilitatorname, :mobilenumber, :mobilenumber2, :emailid, :location, :city, :state, :country, :pincode, :activeflag, :createdby, :created_at, :updated_at

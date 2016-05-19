@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  resources :facilitator_society_masters
+
   resources :event_likes
 
   resources :event_comments
@@ -77,6 +79,7 @@ Rails.application.routes.draw do
     post "update_user", :to => "devise/registrations#update_user"
   end
 
+get 'my_facilitator'  => 'facilitator_society_masters#my_facilitator'
 # Example of regular route:
 #   get 'products/:id' => 'catalog#view'
 

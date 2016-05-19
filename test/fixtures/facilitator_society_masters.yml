@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  society_id: MyString
+  category: MyString
+  facilitatorname: MyString
+  mobilenumber: 1
+  mobilenumber2: 1
+  emailid: MyString
+  location: MyString
+  city: MyString
+  state: MyString
+  country: MyString
+  pincode: MyString
+  activeflag: MyString
+  createdby: MyString
+
+two:
+  society_id: MyString
+  category: MyString
+  facilitatorname: MyString
+  mobilenumber: 1
+  mobilenumber2: 1
+  emailid: MyString
+  location: MyString
+  city: MyString
+  state: MyString
+  country: MyString
+  pincode: MyString
+  activeflag: MyString
+  createdby: MyString

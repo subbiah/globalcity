@@ -1,0 +1,49 @@
+<h1>Listing facilitator_society_masters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Society</th>
+      <th>Category</th>
+      <th>Facilitatorname</th>
+      <th>Mobilenumber</th>
+      <th>Mobilenumber2</th>
+      <th>Emailid</th>
+      <th>Location</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th>Pincode</th>
+      <th>Activeflag</th>
+      <th>Createdby</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @facilitator_society_masters.each do |facilitator_society_master| %>
+      <tr>
+        <td><%= facilitator_society_master.society_id %></td>
+        <td><%= facilitator_society_master.category %></td>
+        <td><%= facilitator_society_master.facilitatorname %></td>
+        <td><%= facilitator_society_master.mobilenumber %></td>
+        <td><%= facilitator_society_master.mobilenumber2 %></td>
+        <td><%= facilitator_society_master.emailid %></td>
+        <td><%= facilitator_society_master.location %></td>
+        <td><%= facilitator_society_master.city %></td>
+        <td><%= facilitator_society_master.state %></td>
+        <td><%= facilitator_society_master.country %></td>
+        <td><%= facilitator_society_master.pincode %></td>
+        <td><%= facilitator_society_master.activeflag %></td>
+        <td><%= facilitator_society_master.createdby %></td>
+        <td><%= link_to 'Show', facilitator_society_master %></td>
+        <td><%= link_to 'Edit', edit_facilitator_society_master_path(facilitator_society_master) %></td>
+        <td><%= link_to 'Destroy', facilitator_society_master, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Facilitator society master', new_facilitator_society_master_path %>
