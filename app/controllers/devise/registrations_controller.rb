@@ -21,6 +21,18 @@ class Devise::RegistrationsController < DeviseController
   def create
     build_resource(sign_up_params)
 
+    user = User.where('email = ? OR mobile = ?', params[:user][:email], params[:user][:mobile]).first
+    puts ":::::::::::::::::::: previous user details"
+    puts user.inspect
+    puts "::::::::::::::::::::::::::::"
+
+    if user && user.active == 'Reject'
+      user.active = "Inactive"
+      user.save(:validate => false)
+      respond_with user.user_details, location: after_sign_up_path_for(resource)
+      return
+    end
+
     puts "::::::::::::::::::::::::::::::: before User cration...."
     code = rand(10000..99999)
     resource.otp = code.to_s
@@ -46,7 +58,7 @@ class Devise::RegistrationsController < DeviseController
         uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code}&,Pls. contact society office for verification and approval.")
         req = Net::HTTP.get(uri)
         puts req #show result        
-        # UserMailer.user_email(resource).deliver
+        UserMailer.user_email(resource).deliver
 
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
@@ -134,12 +146,12 @@ class Devise::RegistrationsController < DeviseController
         user.update_attribute(:otpflag, "Verified")
         
         # UserMailer.user_accept().deliver
-        # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=code-#{code}&")
-        # req = Net::HTTP.get(uri)
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=code-#{user.otp}&")
+        req = Net::HTTP.get(uri)
         
         # user.update_attribute(:otp, nil)
         #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
-        #UserMailer.welcome_olamundo(user, nil, nil).deliver
+        # UserMailer.welcome_olamundo(user, nil, nil).deliver
         respond_with user, location: sign_in_path
         puts "successfully update :::::::::::::::::::::::"
       else
@@ -175,16 +187,21 @@ class Devise::RegistrationsController < DeviseController
     puts user.member_types.inspect
     users = Array.new
     User.all.each do |u|
-      if (user.id != u.id && u.active == "Inactive" && user.member_types[0].priority == 5) || (user.id != u.id && u.active == "Inactive" && user.gclife_registration_flatdetails[0].societyid == u.gclife_registration_flatdetails[0].societyid && u.member_types[0].priority < user.member_types[0].priority)
-        users_json = Hash.new
-        users_json = u.user_details
-        # users_json['gclife_registration_flatdetails'] = u.gclife_registration_flatdetails
-        # users_json = user.to_json(:include => :gclife_registration_flatdetails)
-        # puts ":::::::::::::::::::::::::::::::::::::::::::::: user_details"
-        # puts users
-        # puts ":::::::::::::::::::::::::::::::::::::::::::::: user_details"
 
-        users << JSON.parse(users_json)
+      if (user.member_types[0].priority == 5) || (u.member_types[0].priority < user.member_types[0].priority)
+        u.gclife_registration_flatdetails.each do |flat|
+
+          puts ":::::::::::::::::::::::: began"
+          puts u.inspect
+          puts flat.inspect
+          puts ":::::::::::::::::::::::: end"
+
+          if (u.id != user.id) && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid)) && (flat.status == "Inactive")
+            users_json = Hash.new
+            users_json = u.user_details
+            users << JSON.parse(users_json)
+          end
+        end
       end
     end
 
@@ -204,6 +221,11 @@ class Devise::RegistrationsController < DeviseController
     puts "params[search_key]::::::::::::::::::::}"
     puts params[:search_key].inspect
     
+    puts params[:avenue_name].inspect
+    puts params[:socity_name].inspect
+    puts params[:buildingno].inspect
+    puts params[:flat_no].inspect
+
     @associationanme = params[:avenue_name]
     @societyname = params[:socity_name]
     @buildno = params[:buildingno]
@@ -216,17 +238,18 @@ class Devise::RegistrationsController < DeviseController
     conditions[:flat_number] = @flatno unless @flatno.blank?
 
     if params[:search_key] && params[:search_key].to_s.length > 0
-      users = User.where('username LIKE ?','%'+params[:search_key].to_s+'%')
-      # users = User.where('username LIKE ? AND active= ?' ,'%'+params[:search_key].to_s+'%',"active")
+      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve")
     else  
-      gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
-      @userarray = []
-      gcusers.each do |gcuser|
-        userdata = User.find(gcuser.user_id)
-        @userarray << userdata
-      end
+      # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
+      # @userarray = []
+      # gcusers.each do |gcuser|
+      #   userdata = User.find(gcuser.user_id)
+      #   @userarray << userdata
+      # end
       
-      users = @userarray
+      # users = @userarray
+
+      users = User.all.where(:active => "Approve")
       
     end
     respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)
@@ -234,33 +257,35 @@ class Devise::RegistrationsController < DeviseController
 
   def activate_users
     user = User.find(params[:user_id])
-    user.active = params[:status]
-    user.save(:validate=>false)
-    
-   
-    
-    
+
+    if user && user.active == "Inactive"
+      user.active = params[:status]
+      user.save(:validate=>false)
+    end
 
     # sending notification
     # send_notification(tittle, message, id, category)
-    user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
+    if params[:status] == 'Approve'
+      user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
+    end
 
     user.gclife_registration_flatdetails.each do |flat|
       if flat.status = "Inactive"
-        flat.status = "Active"
+        flat.status = params[:status]
         flat.save
-        scname = SocietyMasters.find(flat.societyid)
-         if user.active == 'Approved'
-           UserMailer.user_accept(user, flat, scname).deliver          
-        end
+        #TODO not able to find ScocietyMasters
+        # scname = SocietyMasters.find(flat.societyid)
+        #   if flat.active == 'Approved'
+        #    UserMailer.user_accept(user, flat, scname).deliver          
+        #   end
         
-        if user.active == 'Rejected'
-          UserMailer.user_reject(user, flat, scname).deliver        
-       end
-        
+        #   if flat.active == 'Rejected'
+        #     UserMailer.user_reject(user, flat, scname).deliver        
+        #   expire_data_after_sign_in
+        #   end
       end
     end
-
+    
     respond_with(user, :location => verify_account_path)
   end
 
@@ -284,6 +309,7 @@ class Devise::RegistrationsController < DeviseController
     user.occupation = params[:occupation]
     user.dob = params[:dob]
     user.privacy = params[:privacy]
+    user.profile_url = params[:profile_url]
 
     user.save(:validate=>false)
 

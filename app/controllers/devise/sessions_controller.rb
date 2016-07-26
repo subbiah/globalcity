@@ -30,6 +30,16 @@ class Devise::SessionsController < DeviseController
     puts resource.inspect
 
     if params[:user][:device_token]
+      #deleting previous device registration
+      prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
+      if prev_users != []
+        puts "previous user found!!!!!!"
+        prev_users.each do |u|
+          u.device_token = ""
+          u.save(:validate => false)
+        end
+      end
+
       resource.device_token = params[:user][:device_token]
       resource.save(:validate => false)
 

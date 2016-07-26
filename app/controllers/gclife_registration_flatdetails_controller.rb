@@ -36,8 +36,8 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     @gclife_registration_flatdetail.status = "Inactive"
     user = User.find(@gclife_registration_flatdetail.user_id)
-    user.active = "Inactive"
-    user.save(:validate=> false)
+    # user.active = "Inactive"
+    # user.save(:validate=> false)
     if @gclife_registration_flatdetail.save
       respond_with user.user_details, :location => verify_account_path
     else
@@ -89,6 +89,6 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gclife_registration_flatdetail_params
-      params.require(:gclife_registration_flatdetail).permit(:user_id, :societyid, :buildingid, :ownertypeid, :avenue_name, :flat_number, :flat_type, :tenurestart, :tenureend)
+      params.require(:gclife_registration_flatdetail).permit(:user_id, :societyid, :buildingid, :ownertypeid, :avenue_name, :flat_number, :flat_type, :tenurestart, :tenureend, :member_type)
     end
 end

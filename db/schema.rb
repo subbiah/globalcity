@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311175641) do
+ActiveRecord::Schema.define(version: 20160518183101) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20160311175641) do
     t.datetime "updated_at"
     t.string   "payment_mode"
     t.string   "ref_no"
+    t.integer  "bill_amount_paid"
   end
 
   create_table "building_masters", force: true do |t|
@@ -84,8 +85,8 @@ ActiveRecord::Schema.define(version: 20160311175641) do
 
   create_table "events", force: true do |t|
     t.string   "title"
-    t.string   "sdesc"
-    t.string   "bdesc"
+    t.text     "sdesc"
+    t.text     "bdesc"
     t.string   "event_type"
     t.integer  "user_id"
     t.integer  "association_id"
@@ -95,6 +96,32 @@ ActiveRecord::Schema.define(version: 20160311175641) do
     t.string   "member_type"
     t.string   "association_name"
     t.string   "society_name"
+    t.text     "association_list"
+    t.text     "society_list"
+    t.text     "member_type_list"
+  end
+
+  create_table "events_users", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "event_id"
+  end
+
+  create_table "facilitator_society_masters", force: true do |t|
+    t.string   "society_id"
+    t.string   "category"
+    t.string   "facilitatorname"
+    t.integer  "mobilenumber"
+    t.integer  "mobilenumber2"
+    t.string   "emailid"
+    t.string   "location"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "pincode"
+    t.string   "activeflag"
+    t.string   "createdby"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "flats", force: true do |t|
@@ -181,6 +208,8 @@ ActiveRecord::Schema.define(version: 20160311175641) do
     t.string   "read"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "from_user_delete_flag"
+    t.boolean  "to_user_delete_flag"
   end
 
   create_table "role_types", force: true do |t|
@@ -263,6 +292,10 @@ ActiveRecord::Schema.define(version: 20160311175641) do
     t.string   "emergency_contct_no"
     t.string   "occupation"
     t.string   "device_token"
+    t.string   "profile_url"
+    t.text     "association_list"
+    t.text     "society_list"
+    t.text     "member_type_list"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
