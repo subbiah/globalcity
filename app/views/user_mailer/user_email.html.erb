@@ -4,7 +4,7 @@
 		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 	</head>
 	<body>
-		<<h2>	Dear <%= @username %>; </h2>
+		<<h2>	Dear <%= @username.capitalize %>; </h2>
 
 		Thank you for registering with GC Life.
 
@@ -12,7 +12,7 @@
 
 		OTP : <%= @otp %>; ;
 
-		Sign in email id:  Email Id
+		Sign in email id:  <%= @to %>
 		<p>
 			Once you enter and submit the OTP password, your membership details will be verified and approved by
 

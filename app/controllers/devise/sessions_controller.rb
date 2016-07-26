@@ -11,6 +11,15 @@ class Devise::SessionsController < DeviseController
   
   # GET /resource/sign_in
   def new
+      # @res = User.new
+      # @res.username = "subbiah"
+      # @res.otp = "subbiah"
+      # @res.email = "subbiahmca@gmail.com"       
+      # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{8123733117}&sender=GCSMST&message=code-#{12345}&")
+      # req = Net::HTTP.get(uri)
+      # puts req #show result        
+      # UserMailer.user_email(@res).deliver
+    
     self.resource = resource_class.new(sign_in_params)
     clean_up_passwords(resource)
     yield resource if block_given?

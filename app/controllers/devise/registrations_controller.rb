@@ -274,15 +274,20 @@ class Devise::RegistrationsController < DeviseController
         flat.status = params[:status]
         flat.save
         #TODO not able to find ScocietyMasters
-        # scname = SocietyMasters.find(flat.societyid)
-        #   if flat.active == 'Approved'
-        #    UserMailer.user_accept(user, flat, scname).deliver          
-        #   end
-        
-        #   if flat.active == 'Rejected'
-        #     UserMailer.user_reject(user, flat, scname).deliver        
-        #   expire_data_after_sign_in
-        #   end
+        scname = SocietyMasters.find(flat.societyid).societyname
+        if flat.active == 'Approved'
+          UserMailer.user_accept(user, flat, scname).deliver
+          # UserMailer.user_accept(user).deliver
+          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Approved&")
+          req = Net::HTTP.get(uri)
+        end
+
+        if flat.active == 'Rejected'
+          UserMailer.user_reject(user, flat, scname).deliver
+          #   expire_data_after_sign_in
+          # UserMailer.user_reject().deliver
+          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Rejected&")
+          req = Net::HTTP.get(uri)
       end
     end
     
