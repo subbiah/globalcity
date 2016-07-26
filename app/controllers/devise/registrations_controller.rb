@@ -26,7 +26,7 @@ class Devise::RegistrationsController < DeviseController
     puts user.inspect
     puts "::::::::::::::::::::::::::::"
 
-    if user && user.active == 'Reject'
+    if user && (user.active == 'Inactive' || user.active == 'Reject' || user.active == 'Delete')
       user.active = "Inactive"
       user.save(:validate => false)
       respond_with user.user_details, location: after_sign_up_path_for(resource)
@@ -196,7 +196,7 @@ class Devise::RegistrationsController < DeviseController
           puts flat.inspect
           puts ":::::::::::::::::::::::: end"
 
-          if (u.id != user.id) && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid)) && (flat.status == "Inactive")
+          if (u.id != user.id && u.otpflag != "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid)) && (flat.status == "Inactive")
             users_json = Hash.new
             users_json = u.user_details
             users << JSON.parse(users_json)

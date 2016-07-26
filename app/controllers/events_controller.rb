@@ -94,12 +94,14 @@ class EventsController < ApplicationController
             if (association_list.include? flat.avenue_name)
               if (society_list.include? flat.societyid)
                 if (member_type_list.include? flat.member_type)
-                  puts "::::::::::::::::::::::::::::: found user"
-                  puts u.id
-                  u.events << @event
-                  u.save(:validate => false)
-                  u.send_notification("GCLife", "#{user.username} posted #{@event.event_type}", @event.id, "#{@event.event_type}")
-                  break
+                  if flat.member_type != "Non_members"
+                    puts "::::::::::::::::::::::::::::: found user"
+                    puts u.id
+                    u.events << @event
+                    u.save(:validate => false)
+                    u.send_notification("GCLife", "#{user.username} posted #{@event.event_type}", @event.id, "#{@event.event_type}")
+                    break
+                  end
                 end
               end 
             end
