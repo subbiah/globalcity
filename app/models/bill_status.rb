@@ -43,6 +43,13 @@ def self.import(file,user_id,soceity_id,month,fy)
       @bill.status = "Due"
       @bill.deletion_flag = "CREATED"
 
+      if @bill.bill_amt <= 0
+        @bill.status = "Confirmed"
+        @bill.payment_mode = "Other"
+        @bill.ref_no = "Other"
+        @bill.confirmed_status = "Paid"
+      end
+
       @bill.save
 
       puts ":::::::::::::::::::::::::::::::::::::: end"
