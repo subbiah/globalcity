@@ -288,6 +288,7 @@ class Devise::RegistrationsController < DeviseController
           # UserMailer.user_reject().deliver
           uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Rejected&")
           req = Net::HTTP.get(uri)
+        end
       end
     end
     
