@@ -274,7 +274,8 @@ class Devise::RegistrationsController < DeviseController
         flat.status = params[:status]
         flat.save
         #TODO not able to find ScocietyMasters
-        scname = SocietyMaster.find(flat.societyid).societyname
+        # scname = SocietyMaster.find(flat.societyid).societyname
+        scname = "scname"
         if flat.active == 'Approved'          
           # UserMailer.user_accept(user).deliver
           uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Approved&")

@@ -14,12 +14,12 @@ class UserMailer < ActionMailer::Base
   
   def user_accept(user, flat, scname)
     
-    @user.name = user.username
-    @user.email = user.email
-    @user.mobileno = user.mobile
-    @user.scname = scname
-    @user.buildingNo = flat.buildingid
-    @user.flatno = flat.flat_number
+    @user_name = user.username
+    @user_email = user.email
+    @user_mobileno = user.mobile
+    @user_scname = scname
+    @user_buildingNo = flat.buildingid
+    @user_flatno = flat.flat_number
      
     @to = user.email
     mail(to: @to, subject: 'GCLife membership Approved!!')
