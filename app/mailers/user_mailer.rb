@@ -27,14 +27,14 @@ class UserMailer < ActionMailer::Base
   
   def user_reject(user, flat, scname)
         
-    @user.avenuename= flat.avenue_name
-    @user.SocietyName= scname
-    @user.BuildingName= flat.buildingid
-    @user.FlatNumber= flat.flat_number
-    @user.Ownertype= flat.ownertypeid
-    @user.Membertype= flat.member_type
-    @user.reason = ""
-    @user.date = '' 
+    @user_avenuename= flat.avenue_name
+    @user_societyName= scname
+    @user_buildingName= flat.buildingid
+    @user_flatNumber= flat.flat_number
+    @user_ownertype= flat.ownertypeid
+    @user_membertype= flat.member_type
+    @user_reason = ""
+    @user_date = '' 
     
     @to = user.email
     mail(to: @to, subject: 'GCLife Membership Status – “Rejected”')

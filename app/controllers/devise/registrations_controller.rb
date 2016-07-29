@@ -196,7 +196,7 @@ class Devise::RegistrationsController < DeviseController
           puts flat.inspect
           puts ":::::::::::::::::::::::: end"
 
-          if (u.id != user.id && u.otpflag != "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid)) && (flat.status == "Inactive")
+          if (u.id != user.id && u.otpflag != "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid) && (flat.status == "Inactive"))
             users_json = Hash.new
             users_json = u.user_details
             users << JSON.parse(users_json)

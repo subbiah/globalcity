@@ -4,28 +4,28 @@
 		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 	</head>
 	<body>
-		<h2>Dear  <%= @user.name %>;</h2>
+		<h2>Dear  <%= @user_name %>;</h2>
 
 		Your membership registration request for below flat details has been rejected by the society admin
 
-		team.
+		team.<br>
 
-		Flat Detail and Approval status:
+		Flat Detail and Approval status:<br>
 
-		Avenue <%= @user.avenuename %>
+		Avenue <%= @user_avenuename %><br>
 
-		Society Name <%= @user.SocietyName %> 
+		Society Name <%= @user_societyName %> <br>
 
-		Building Name <%= @user.BuildingName %>   
+		Building Name <%= @user_buildingName %>  <br> 
 
-		Flat Detail <%= @user.FlatNumber %>  
+		Flat Detail <%= @user_flatNumber %>  <br>
 
-		Owner Type <%= @user.Ownertype %>   
+		Owner Type <%= @user_ownertype %>   <br>
 
-		Member Type <%= @user.Membertype %>   
+		Member Type <%= @user_membertype %>   <br>
 
-		Rejection Reason <%= @user.reason %>   
+		Rejection Reason <%= @user_reason %>   <br>
 
-		Rejected Date and Time  <%= @user.date %>
+		Rejected Date and Time  <%= @user_date %><br>
 	</body>
 </html>
