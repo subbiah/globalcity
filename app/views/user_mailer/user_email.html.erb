@@ -4,15 +4,15 @@
 		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 	</head>
 	<body>
-		<<h2>	Dear <%= @username.capitalize %>; </h2>
+		<h2>Dear <%= @username.capitalize %>; </h2>
+		 
+		Thank you for registering with GC Life.<br><br><br>
 
-		Thank you for registering with GC Life.<br>
+		Please find the registration OTP to activate your GC Life membership.<br><br>
 
-		Please find the registration OTP to activate your GC Life membership.<br>
+		OTP : <%= @otp %>;<br><br>
 
-		OTP : <%= @otp %>;<br>
-
-		Sign in email id:  <%= @to %><br>
+		Sign in email id:  <%= @to %><br><br>
 		<p>
 			Once you enter and submit the OTP password, your membership details will be verified and approved by
 
@@ -21,7 +21,7 @@
 			In case of any approval problem or delay,<br> please contact your society admin team or write to us at
 			
 			feedback@globalcityflatowners.org
-		</p>				
+		</p>		<br><br>		
 		<p> Thank you </p>
 		
 		<h4>Regards</h4>
