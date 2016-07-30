@@ -276,14 +276,14 @@ class Devise::RegistrationsController < DeviseController
         #TODO not able to find ScocietyMasters
         # scname = SocietyMaster.find(flat.societyid).societyname
         # scname = "scname"
-        if flat.active == 'Approved'          
+        if user.active == 'Approve'          
           # UserMailer.user_accept(user).deliver
           uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
           req = Net::HTTP.get(uri)
           UserMailer.user_accept(user, flat).deliver
         end
 
-        if flat.active == 'Rejected'          
+        if user.active == 'Reject'          
           # expire_data_after_sign_in
           # UserMailer.user_reject().deliver
           uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected due to &lt;&lt;Reason&gt;&gt;, Please contact society Admin.&")
