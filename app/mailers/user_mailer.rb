@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
     mail(to: @to, subject: 'GCLife membership Approved!!')
   end
   
-  def user_reject(user, flat)
+  def user_reject(user, flat, reason)
     @user_name = user.username    
     @user_avenuename= flat.avenue_name
     @user_societyName= flat.societyid
@@ -32,7 +32,7 @@ class UserMailer < ActionMailer::Base
     @user_flatNumber= flat.flat_number
     @user_ownertype= flat.ownertypeid
     @user_membertype= flat.member_type
-    @user_reason = ""
+    @user_reason = reason
     @user_date = Time.now
     
     @to = user.email
