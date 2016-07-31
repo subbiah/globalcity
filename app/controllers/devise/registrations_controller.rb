@@ -59,7 +59,7 @@ class Devise::RegistrationsController < DeviseController
     if resource.persisted?
       if resource.active_for_authentication?
         UserMailer.user_email(resource).deliver
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code}&,Pls. contact society office for verification and approval.")
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code},Pls. contact society office for verification and approval.&")
         req = Net::HTTP.get(uri)
         puts req #show result        
         # UserMailer.user_email(resource).deliver
