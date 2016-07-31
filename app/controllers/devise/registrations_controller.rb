@@ -63,6 +63,10 @@ class Devise::RegistrationsController < DeviseController
         req = Net::HTTP.get(uri)
         puts req #show result        
         # UserMailer.user_email(resource).deliver
+        
+        # Secretary SMS Code
+        # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=You got new member verification request from  #{fullname, BldgNo / Flat Number}&")
+        # req = Net::HTTP.get(uri)        
 
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
