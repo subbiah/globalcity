@@ -261,6 +261,8 @@ class Devise::RegistrationsController < DeviseController
 
   def activate_users
     user = User.find(params[:user_id])
+    
+    # @reason = params[:reason]
 
     if user && user.active == "Inactive"
       user.active = params[:status]
@@ -293,20 +295,17 @@ class Devise::RegistrationsController < DeviseController
 
         # scname = flat.societyid #SocietyMaster.find_by_societyname(flat.societyid).societyname
 
-        # if flat.status == 'Approve'          
-        #   # UserMailer.user_accept(user).deliver
-        #   uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Approved&")
-        #   req = Net::HTTP.get(uri)
-        #   UserMailer.user_accept(user, flat, scname).deliver
-        # end
+        if flat.status == 'Approve'  
+          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
+          req = Net::HTTP.get(uri)
+          UserMailer.user_accept(user, flat).deliver
+        end
 
-        # if flat.status == 'Reject'          
-        #   # expire_data_after_sign_in
-        #   # UserMailer.user_reject().deliver
-        #   uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Rejected&")
-        #   req = Net::HTTP.get(uri)
-        #   UserMailer.user_reject(user, flat, scname).deliver
-        # end
+        if flat.status == 'Reject'   
+          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected and refer your email id for the rejected reason or Please contact society Admin&")
+          req = Net::HTTP.get(uri)
+          UserMailer.user_reject(user, flat).deliver
+        end
       end
     end
     
