@@ -99,7 +99,7 @@ class EventsController < ApplicationController
                     puts u.id
                     u.events << @event
                     u.save(:validate => false)
-                    u.send_notification("GCLife", "#{user.username} posted #{@event.event_type}", @event.id, "#{@event.event_type}")
+                    u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
                     break
                   end
                 end

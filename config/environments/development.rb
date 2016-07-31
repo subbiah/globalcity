@@ -44,6 +44,10 @@ config.action_mailer.smtp_settings = {
  :authentication       => "plain",
 :enable_starttls_auto => true
 }
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.perform_deliveries = true
+
+config.action_mailer.asset_host = 'http://54.169.40.151:3000/'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

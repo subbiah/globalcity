@@ -27,10 +27,14 @@ class Devise::RegistrationsController < DeviseController
     puts "::::::::::::::::::::::::::::"
 
     if user && (user.active == 'Inactive' || user.active == 'Reject' || user.active == 'Delete')
-      user.active = "Inactive"
-      user.save(:validate => false)
-      respond_with user.user_details, location: after_sign_up_path_for(resource)
-      return
+      # user = resource
+      # user.active = "Inactive"
+      # user.save(:validate => false)
+      # respond_with user.user_details, location: after_sign_up_path_for(resource)
+      # return
+
+      #TODO vertyfy later
+      user.destroy
     end
 
     puts "::::::::::::::::::::::::::::::: before User cration...."
@@ -196,7 +200,7 @@ class Devise::RegistrationsController < DeviseController
           puts flat.inspect
           puts ":::::::::::::::::::::::: end"
 
-          if (u.id != user.id && u.otpflag != "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid) && (flat.status == "Inactive"))
+          if ((u.id != user.id && flat.status == "Inactive") && (user.member_types[0].priority == 5)) || ((user.gclife_registration_flatdetails[0].societyid == flat.societyid) && (flat.status == "Inactive"))
             users_json = Hash.new
             users_json = u.user_details
             users << JSON.parse(users_json)
@@ -261,6 +265,16 @@ class Devise::RegistrationsController < DeviseController
     if user && user.active == "Inactive"
       user.active = params[:status]
       user.save(:validate=>false)
+      if params[:status] == 'Approve'
+        #Send notification to all members in society pool
+        User.all.each do |u|
+          u.gclife_registration_flatdetails.each do |flat|
+            if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
+              u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+            end
+          end
+        end
+      end
     end
 
     # sending notification
@@ -270,26 +284,29 @@ class Devise::RegistrationsController < DeviseController
     end
 
     user.gclife_registration_flatdetails.each do |flat|
-      if flat.status = "Inactive"
+      if flat.status == "Inactive" #|| flat.status == 'Reject'
         flat.status = params[:status]
         flat.save
-        #TODO not able to find ScocietyMasters
-        # scname = SocietyMaster.find(flat.societyid).societyname
-        # scname = "scname"
-        if user.active == 'Approve'          
-          # UserMailer.user_accept(user).deliver
-          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
-          req = Net::HTTP.get(uri)
-          UserMailer.user_accept(user, flat).deliver
-        end
+        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
+        puts flat.inspect
+        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
 
-        if user.active == 'Reject'          
-          # expire_data_after_sign_in
-          # UserMailer.user_reject().deliver
-          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected due to &lt;&lt;Reason&gt;&gt;, Please contact society Admin.&")
-          req = Net::HTTP.get(uri)
-          UserMailer.user_reject(user, flat).deliver
-        end
+        # scname = flat.societyid #SocietyMaster.find_by_societyname(flat.societyid).societyname
+
+        # if flat.status == 'Approve'          
+        #   # UserMailer.user_accept(user).deliver
+        #   uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Approved&")
+        #   req = Net::HTTP.get(uri)
+        #   UserMailer.user_accept(user, flat, scname).deliver
+        # end
+
+        # if flat.status == 'Reject'          
+        #   # expire_data_after_sign_in
+        #   # UserMailer.user_reject().deliver
+        #   uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Rejected&")
+        #   req = Net::HTTP.get(uri)
+        #   UserMailer.user_reject(user, flat, scname).deliver
+        # end
       end
     end
     
