@@ -196,7 +196,7 @@ class Devise::RegistrationsController < DeviseController
     users = Array.new
     User.all.each do |u|
 
-      if (user.member_types[0].priority == 5) || (u.member_types[0].priority < user.member_types[0].priority)
+      if (u.id != user.id) && ((user.member_types[0].priority == 5) || (u.member_types[0].priority < user.member_types[0].priority))
         u.gclife_registration_flatdetails.each do |flat|
 
           puts ":::::::::::::::::::::::: began"
@@ -204,16 +204,17 @@ class Devise::RegistrationsController < DeviseController
           puts flat.inspect
           puts ":::::::::::::::::::::::: end"
 
-          if ((u.id != user.id && flat.status == "Inactive") && (user.member_types[0].priority == 5)) || ((user.gclife_registration_flatdetails[0].societyid == flat.societyid) && (flat.status == "Inactive"))
+          if (flat.status == "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid))
             users_json = Hash.new
             users_json = u.user_details
             users << JSON.parse(users_json)
+            break
           end
         end
       end
     end
 
-    respond_with(users, :location => verify_account_path)
+    respond_with(users.take(params[:limit].to_i).reverse, :location => verify_account_path)
   end
 
   def all_users
@@ -246,7 +247,7 @@ class Devise::RegistrationsController < DeviseController
     conditions[:flat_number] = @flatno unless @flatno.blank?
 
     if params[:search_key] && params[:search_key].to_s.length > 0
-      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve")
+      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve").limit(params[:limit])
     else  
       # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
       # @userarray = []
@@ -257,7 +258,7 @@ class Devise::RegistrationsController < DeviseController
       
       # users = @userarray
 
-      users = User.all.where(:active => "Approve")
+      users = User.all.where(:active => "Approve").limit(params[:limit])
       
     end
     respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)

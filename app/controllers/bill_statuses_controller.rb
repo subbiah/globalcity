@@ -139,6 +139,7 @@ class BillStatusesController < ApplicationController
     @bill_update.payment_mode = @payment_mode
     @bill_update.ref_no = @ref_no
     @bill_update.status = "Paid"
+    @bill_update.confirmed_status = "Confirm"
     @bill_update.bill_amount_paid = params[:bill_amount_paid]
     @bill_update.save
 
@@ -153,12 +154,12 @@ class BillStatusesController < ApplicationController
       billStatus.status = "Confirmed"
       billStatus.payment_mode = params[:payment_mode]
       billStatus.ref_no = params[:ref_no]
-      billStatus.confirmed_status = params[:confirmed_status]
+      billStatus.confirmed_status = "Confirmed" #params[:confirmed_status]
     else
       billStatus.status = "Paid"
       billStatus.payment_mode = params[:payment_mode]
       billStatus.ref_no = params[:ref_no]
-      billStatus.confirmed_status = params[:confirmed_status]
+      billStatus.confirmed_status = "Confirm" #params[:confirmed_status]
     end
 
     billStatus.bill_amount_paid = params[:bill_amount_paid]
