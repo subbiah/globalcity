@@ -85,8 +85,8 @@ ActiveRecord::Schema.define(version: 20160518183101) do
 
   create_table "events", force: true do |t|
     t.string   "title"
-    t.text     "sdesc"
-    t.text     "bdesc"
+    t.string   "sdesc"
+    t.string   "bdesc"
     t.string   "event_type"
     t.integer  "user_id"
     t.integer  "association_id"
