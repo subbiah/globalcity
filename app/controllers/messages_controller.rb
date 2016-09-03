@@ -7,12 +7,12 @@ class MessagesController < ApplicationController
   def index
 
     if params[:type] == "sent"
-      @messages = Message.where(:from_user_id => params[:user_id].to_i, :from_user_delete_flag => false)
+      @messages = Message.where(:from_user_id => params[:user_id].to_i, :from_user_delete_flag => false).offset(params[:offset]).limit(params[:limit]).reverse
     else
-      @messages = Message.where(:to_user_id => params[:user_id].to_i, :to_user_delete_flag => false)
+      @messages = Message.where(:to_user_id => params[:user_id].to_i, :to_user_delete_flag => false).offset(params[:offset]).limit(params[:limit]).reverse
     end
     # @messages = Message.all
-    @messages = @messages.reverse
+    # @messages = @messages.reverse
     respond_with(@messages)
   end
   

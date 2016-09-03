@@ -13,14 +13,14 @@ class EventsController < ApplicationController
 
     user = User.find(params[:user_id])
 
-    if params[:user_id] && params[:search_text] && params[:limit]
+    if params[:user_id] && params[:search_text] && params[:limit] && params[:offset]
       if params[:event_type]
-        @events = user.events.where('title LIKE ? AND event_type = ?','%'+params[:search_text]+'%', params[:event_type]).limit(params[:limit]).reverse
+        @events = user.events.order('created_at DESC').where('title LIKE ? AND event_type = ?','%'+params[:search_text]+'%', params[:event_type]).offset(params[:offset]).limit(params[:limit])
       end
     else
-      if params[:event_type] && params[:limit]
+      if params[:event_type] && params[:limit] && params[:offset]
         puts "Insede if :::::::::::::::::::: #{params[:event_type]}"
-        @events = user.events.where(:event_type => params[:event_type]).limit(params[:limit]).reverse
+        @events = user.events.order('created_at DESC').where(:event_type => params[:event_type]).offset(params[:offset]).limit(params[:limit])
       end
     end
 

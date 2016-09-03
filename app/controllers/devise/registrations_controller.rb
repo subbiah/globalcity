@@ -58,12 +58,15 @@ class Devise::RegistrationsController < DeviseController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-        UserMailer.user_email(resource).deliver
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code},Pls. contact society office for verification and approval.&")
-        req = Net::HTTP.get(uri)
-        puts req #show result        
-        # UserMailer.user_email(resource).deliver
-        
+
+        Thread.new do
+          UserMailer.user_email(resource).deliver
+          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code},Pls. contact society office for verification and approval.&")
+          req = Net::HTTP.get(uri)
+          puts req #show result        
+          # UserMailer.user_email(resource).deliver
+        end
+
         # Secretary SMS Code
         # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=You got new member verification request from  #{fullname, BldgNo / Flat Number}&")
         # req = Net::HTTP.get(uri)        
@@ -204,7 +207,7 @@ class Devise::RegistrationsController < DeviseController
           puts flat.inspect
           puts ":::::::::::::::::::::::: end"
 
-          if (flat.status == "Inactive") && ((user.member_types[0].priority == 5) || (user.gclife_registration_flatdetails[0].societyid == flat.societyid))
+          if ((flat.status == "Inactive") && (user.member_types[0].priority == 5)) || ((flat.status == "Inactive") && (user.gclife_registration_flatdetails[0].societyid == flat.societyid))
             users_json = Hash.new
             users_json = u.user_details
             users << JSON.parse(users_json)
@@ -214,7 +217,13 @@ class Devise::RegistrationsController < DeviseController
       end
     end
 
-    respond_with(users.take(params[:limit].to_i).reverse, :location => verify_account_path)
+    if users.reverse[params[:offset].to_i,params[:limit].to_i]
+      respond_with(users.reverse[params[:offset].to_i,params[:limit].to_i], :location => verify_account_path)
+      return
+    else
+      respond_with(Array.new, :location => verify_account_path)
+      return
+    end
   end
 
   def all_users
@@ -247,7 +256,7 @@ class Devise::RegistrationsController < DeviseController
     conditions[:flat_number] = @flatno unless @flatno.blank?
 
     if params[:search_key] && params[:search_key].to_s.length > 0
-      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve").limit(params[:limit])
+      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve").offset(params[:offset]).limit(params[:limit])
     else  
       # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
       # @userarray = []
@@ -258,7 +267,8 @@ class Devise::RegistrationsController < DeviseController
       
       # users = @userarray
 
-      users = User.all.where(:active => "Approve").limit(params[:limit])
+      # users = User.all.where(:active => "Approve").limit(params[:limit])
+      users = User.all.where(:active => "Approve").offset(params[:offset]).limit(params[:limit])
       
     end
     respond_with(users.to_json(:include => :gclife_registration_flatdetails), :location => verify_account_path)
@@ -288,6 +298,42 @@ class Devise::RegistrationsController < DeviseController
     # send_notification(tittle, message, id, category)
     if params[:status] == 'Approve'
       user.send_notification("GCLife", "Your account details are verfied!!", "", "Verification")
+
+      # Refreshing the events
+        user.events.delete_all
+        user.save(:validate => false)
+        #assigning previous event
+        Thread.new do
+          puts "Background thread started :::::::::"
+          Event.all.each do |event|
+            association_list = event.association_list.split(',')
+            society_list = event.society_list.split(',')
+            member_type_list = event.member_type_list.split(',')
+
+            user.gclife_registration_flatdetails.each do |flat|
+              puts "::::::::::::::::::::::::::::: flat verification started"
+              puts flat.avenue_name
+              puts flat.societyid
+              puts flat.member_type
+              puts "::::::::::::::::::::::::::::::::::::::::"
+                if (association_list.include? flat.avenue_name)
+                  if (society_list.include? flat.societyid)
+                    if (member_type_list.include? flat.member_type)
+                      if flat.member_type != "Non_members"
+                        puts "::::::::::::::::::::::::::::: found user"
+                        puts user.id
+                        user.events << event
+                        user.save(:validate => false)
+                        break
+                      end
+                    end
+                  end 
+                end
+            end
+          end
+          puts "Background thread ended :::::::::"
+        end
+
     end
 
     user.gclife_registration_flatdetails.each do |flat|
@@ -301,15 +347,19 @@ class Devise::RegistrationsController < DeviseController
         # scname = flat.societyid #SocietyMaster.find_by_societyname(flat.societyid).societyname
 
         if flat.status == 'Approve'  
-          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
-          req = Net::HTTP.get(uri)
-          UserMailer.user_accept(user, flat).deliver
+          Thread.new do
+            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
+            req = Net::HTTP.get(uri)
+            UserMailer.user_accept(user, flat).deliver
+          end
         end
 
         if flat.status == 'Reject'   
-          uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected and refer your email id for the rejected reason or Please contact society Admin&")
-          req = Net::HTTP.get(uri)
-          UserMailer.user_reject(user, flat, @reason).deliver
+          Thread.new do
+            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected and refer your email id for the rejected reason or Please contact society Admin&")
+            req = Net::HTTP.get(uri)
+            UserMailer.user_reject(user, flat, @reason).deliver
+          end
         end
       end
     end

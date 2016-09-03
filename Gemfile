@@ -7,6 +7,8 @@ gem 'rails', '4.1.5'
 # gem 'sqlite3'
 gem  'mysql2'
 
+gem 'youtube_it'
+
 gem 'rails_admin'
 
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"

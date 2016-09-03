@@ -6,9 +6,9 @@ class ImportantContactsController < ApplicationController
   def index
     
     if params[:search_key] && params[:search_key].to_s.length > 0
-     @important_contacts = ImportantContact.where('name LIKE ?','%'+params[:search_key].to_s+'%')
+     @important_contacts = ImportantContact.where('name LIKE ?','%'+params[:search_key].to_s+'%').offset(params[:offset]).limit(params[:limit])
    else
-      @important_contacts = ImportantContact.all
+      @important_contacts = ImportantContact.all.offset(params[:offset]).limit(params[:limit])
    end
    
    
