@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518183101) do
+ActiveRecord::Schema.define(version: 20160904130530) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -85,8 +85,8 @@ ActiveRecord::Schema.define(version: 20160518183101) do
 
   create_table "events", force: true do |t|
     t.string   "title"
-    t.string   "sdesc"
-    t.string   "bdesc"
+    t.text     "sdesc"
+    t.text     "bdesc"
     t.string   "event_type"
     t.integer  "user_id"
     t.integer  "association_id"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20160518183101) do
     t.text     "association_list"
     t.text     "society_list"
     t.text     "member_type_list"
+    t.string   "username"
   end
 
   create_table "events_users", id: false, force: true do |t|

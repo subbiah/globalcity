@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     get "search_users", :to => "devise/registrations#search_users"
     get "all_users", :to => "devise/registrations#all_users"
     post "update_user", :to => "devise/registrations#update_user"
+    get "reset_user", :to => "devise/registrations#reset_user"
   end
 
 get 'my_facilitator'  => 'facilitator_society_masters#my_facilitator'

@@ -43,9 +43,12 @@ class EventsController < ApplicationController
   def create
     @event = Event.new(event_params)
 
+    user = User.find(@event.user_id)
+
     puts "Processing images ::::::::::::::::::::"
     puts params[:event][:EventImages]
     
+    @event.username = user.username
     @event.save
 
     if params[:event][:EventImages]

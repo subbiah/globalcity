@@ -199,22 +199,40 @@ class Devise::RegistrationsController < DeviseController
     users = Array.new
     User.all.each do |u|
 
-      if (u.id != user.id) && ((user.member_types[0].priority == 5) || (u.member_types[0].priority < user.member_types[0].priority))
+
+      # New logic for memberverfication
+      members = ["Non_members","Member","Committee_member","Secretary","Chairman","Treasurer"]
+      if u.id != user.id
         u.gclife_registration_flatdetails.each do |flat|
-
-          puts ":::::::::::::::::::::::: began"
-          puts u.inspect
-          puts flat.inspect
-          puts ":::::::::::::::::::::::: end"
-
-          if ((flat.status == "Inactive") && (user.member_types[0].priority == 5)) || ((flat.status == "Inactive") && (user.gclife_registration_flatdetails[0].societyid == flat.societyid))
-            users_json = Hash.new
-            users_json = u.user_details
-            users << JSON.parse(users_json)
-            break
+          user.gclife_registration_flatdetails.each do |user_flat|
+            if (u.active == "Inactive" || u.active == "Approve") && ((flat.status == "Inactive") && (user.member_types[0].priority == 6)) || (flat.status == "Inactive" && (members.index(user_flat.member_type) == 5 || members.index(flat.member_type) < members.index(user_flat.member_type)) && user_flat.societyid == flat.societyid)
+              users_json = Hash.new
+              users_json = u.user_flats(flat.id)
+              users << JSON.parse(users_json)
+              break
+            end
           end
         end
       end
+
+      # if (u.id != user.id) && ((user.member_types[0].priority == 5) || (u.member_types[0].priority < user.member_types[0].priority))
+      #   u.gclife_registration_flatdetails.each do |flat|
+
+      #     puts ":::::::::::::::::::::::: began"
+      #     puts u.inspect
+      #     puts flat.inspect
+      #     puts ":::::::::::::::::::::::: end"
+
+      #     if ((flat.status == "Inactive") && (user.member_types[0].priority == 5)) || ((flat.status == "Inactive") && (user.gclife_registration_flatdetails[0].societyid == flat.societyid))
+      #       users_json = Hash.new
+      #       users_json = u.user_flats(flat.id)
+      #       users << JSON.parse(users_json)
+      #       # break
+      #     end
+      #   end
+      # end
+
+
     end
 
     if users.reverse[params[:offset].to_i,params[:limit].to_i]
@@ -256,7 +274,7 @@ class Devise::RegistrationsController < DeviseController
     conditions[:flat_number] = @flatno unless @flatno.blank?
 
     if params[:search_key] && params[:search_key].to_s.length > 0
-      users = User.where('username LIKE ? and active = ?','%'+params[:search_key].to_s+'%',"Approve").offset(params[:offset]).limit(params[:limit])
+      users = User.all.order('created_at DESC').where('username LIKE ?','%'+params[:search_key].to_s+'%').offset(params[:offset]).limit(params[:limit])
     else  
       # gcusers = GclifeRegistrationFlatdetail.find(:all, :conditions => conditions)
       # @userarray = []
@@ -284,15 +302,48 @@ class Devise::RegistrationsController < DeviseController
       user.save(:validate=>false)
       if params[:status] == 'Approve'
         #Send notification to all members in society pool
-        User.all.each do |u|
-          u.gclife_registration_flatdetails.each do |flat|
-            if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
-              u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+        Thread.new do
+          User.all.each do |u|
+            u.gclife_registration_flatdetails.each do |flat|
+              if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
+                u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+              end
             end
           end
         end
       end
     end
+
+    #updating Flast status
+    flat = GclifeRegistrationFlatdetail.find(params[:flat_id])
+    # user.gclife_registration_flatdetails.each do |flat|
+      # if flat.status == "Inactive" #|| flat.status == 'Reject'
+        flat.status = params[:status]
+        flat.save
+        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
+        puts flat.inspect
+        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
+
+        # scname = flat.societyid #SocietyMaster.find_by_societyname(flat.societyid).societyname
+
+        if flat.status == 'Approve'  
+          Thread.new do
+            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
+            req = Net::HTTP.get(uri)
+            UserMailer.user_accept(user, flat).deliver
+          end
+        end
+
+        if flat.status == 'Reject'   
+          Thread.new do
+            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected and refer your email id for the rejected reason or Please contact society Admin&")
+            req = Net::HTTP.get(uri)
+            UserMailer.user_reject(user, flat, @reason).deliver
+          end
+        end
+      # end
+    # end
+
 
     # sending notification
     # send_notification(tittle, message, id, category)
@@ -335,34 +386,6 @@ class Devise::RegistrationsController < DeviseController
         end
 
     end
-
-    user.gclife_registration_flatdetails.each do |flat|
-      if flat.status == "Inactive" #|| flat.status == 'Reject'
-        flat.status = params[:status]
-        flat.save
-        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
-        puts flat.inspect
-        puts "::::::::::::::::::::::::::::::::::: changed flat deatils"
-
-        # scname = flat.societyid #SocietyMaster.find_by_societyname(flat.societyid).societyname
-
-        if flat.status == 'Approve'  
-          Thread.new do
-            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact - feedback@globalcityflatowners.org&")
-            req = Net::HTTP.get(uri)
-            UserMailer.user_accept(user, flat).deliver
-          end
-        end
-
-        if flat.status == 'Reject'   
-          Thread.new do
-            uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Your membership request got rejected and refer your email id for the rejected reason or Please contact society Admin&")
-            req = Net::HTTP.get(uri)
-            UserMailer.user_reject(user, flat, @reason).deliver
-          end
-        end
-      end
-    end
     
     respond_with(user, :location => verify_account_path)
   end
@@ -397,6 +420,18 @@ class Devise::RegistrationsController < DeviseController
   def user_details
     user = User.find(params[:user_id])
     respond_with(user.user_details, :location => verify_account_path)
+  end
+
+  def reset_user
+    flat = GclifeRegistrationFlatdetail.find(params[:flat_id])
+
+    if params[:status] == "on"
+      flat.status = "Inactive"
+    else
+      flat.status = "Reject"
+    end
+
+    respond_with(flat, :location => verify_account_path)
   end
 
   # PUT /resource

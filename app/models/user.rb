@@ -21,16 +21,20 @@ class User < ActiveRecord::Base
   	user_details = Hash.new
   	#user_details[:user] = self
   	#user_details[:flat_details] = self.gclife_registration_flatdetails
-    user_details = self.to_json(:include => :gclife_registration_flatdetails)
+    user_details = self.to_json(:include => :gclife_registration_flatdetails) 
     #user_details[:flat_details] = self.gclife_registration_flatdetails
   	return user_details
   end
   # accepts_nested_attributes_for :gclife_registration_flatdetails, :allow_destroy => true
+
+  def user_flats(flat_id)
+    return User.includes(:gclife_registration_flatdetails).where(gclife_registration_flatdetails: {user_id: self.id, id: flat_id})[0].to_json(:include => :gclife_registration_flatdetails)
+  end
   
   def send_notification(tittle, message, id, category)
     gcm = GCM.new("AIzaSyCaRC7Cfahy41WKzUHPWTeXwlhHBABypkc")    
     registration_ids= [self.device_token] # an array of one or more client registration IDs
-    options = {data: {tittle: tittle, message: message, category: category, event: id}, collapse_key: "updated_score"}
+    options = {data: {tittle: tittle, message: message, category: category, event: id, notId: rand(5..10000)}, collapse_key: "updated_score"}
     response = gcm.send(registration_ids, options)
   
     puts response
