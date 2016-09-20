@@ -2,7 +2,6 @@ class BillStatusesController < ApplicationController
   before_action :set_bill_status, only: [:show, :edit, :update, :destroy]
 
   respond_to :html,:json
-  
   def view_bill
 
     @society_master_id = SocietyMaster.find_by_societyname(params[:society_master_id]).id
@@ -10,23 +9,23 @@ class BillStatusesController < ApplicationController
     @societyid = @society_master_id
     @fy = params[:fyear]
     @month = params[:month]
-    
+
     puts "___________________________________"
-    
+
     @total_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND deletion_flag = ?", @societyid, @fy, @month, "CREATED")
     @due_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Due", "CREATED")
     @paid_status_count = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Paid", "CREATED")
     @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED")
     @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Due", "CREATED").to_a.sum(&:bill_amt)
     @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED").to_a.sum(&:bill_amt)
-    
+
     puts ":::::::::::::::: confirmed_amount"
     puts @confirmed_amount.inspect
     puts ":::::::::::::::: confirmed_amount"
 
     @balanced_amount = @due_amount - @confirmed_amount
-     
-    society_bill_management_count = { 
+
+    society_bill_management_count = {
       "total_count" => @total_count.count,
       "due_status_count" => @due_status_count.count,
       "paid_status_count" => @paid_status_count.count,
@@ -35,23 +34,22 @@ class BillStatusesController < ApplicationController
       "confirmed_amount" => @confirmed_amount,
       "balanced_amount" => @balanced_amount
     }
-    
-    society_bill_management_data = { 
+
+    society_bill_management_data = {
       "total_data" => @total_count,
       "due_status_data" => @due_status_count,
       "paid_status_data" => @paid_status_count,
-      "confirmed_status_data" => @confirmed_status      
+      "confirmed_status_data" => @confirmed_status
     }
-    
-    
-     society_bill = {
-       "society_bill_management_count" => society_bill_management_count,
-       "society_bill_management_data" => society_bill_management_data
-     }
-    
+
+    society_bill = {
+      "society_bill_management_count" => society_bill_management_count,
+      "society_bill_management_data" => society_bill_management_data
+    }
+
     respond_with society_bill
   end
-  
+
   def my_bill
     # @societyid = params[:society_master_id]
 
@@ -62,38 +60,36 @@ class BillStatusesController < ApplicationController
     @finacialyear = params[:fyear]
     @userid = params[:user_id]
     user = User.find(@userid)
-    
+
     # @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ?", @societyid, @finacialyear, @userid, @buildinno)
 
     # @paid = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Paid")
-        
-    # @due = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Due")
 
+    # @due = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Due")
 
     @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "CREATED")
 
     @paid = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Paid", "CREATED")
-        
+
     @due = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Due", "CREATED")
 
     @paid_amt = @paid.sum :bill_amt
     @due_amt = @due.sum :bill_amt
     @total_amt = @paid_amt +  @due_amt
-    
-      
-    # summary = { 
+
+    # summary = {
     #   "paid_amt" => @paid_amt,
     #   "due_amt" => @due_amt,
-    #   "total_amt" => @total_amt,      
+    #   "total_amt" => @total_amt,
     # }
-    
+
     @updated_bils = Array.new
     @bill_detail.each do |bill|
       user.gclife_registration_flatdetails.each do |flat|
         puts "flat details :::::: #{flat.flat_number.to_i}"
         puts "bil flat details :::::: #{bill.flat_id}"
         if flat.flat_number.to_i == bill.flat_id
-          @updated_bils << bill
+        @updated_bils << bill
         end
       end
     end
@@ -103,19 +99,19 @@ class BillStatusesController < ApplicationController
     total = 0
     @updated_bils.each do |bil|
       if bil.status == "Paid"
-        paid = paid + bil.bill_amt
+      paid = paid + bil.bill_amt
       end
       if bil.status == "Due"
-        due = due + bil.bill_amt
+      due = due + bil.bill_amt
       end
     end
 
     total = paid + due
 
-    summary = { 
+    summary = {
       "paid_amt" => paid,
       "due_amt" => due,
-      "total_amt" => total,      
+      "total_amt" => total,
     }
 
     puts "summary ::::::::::: #{summary.inspect}"
@@ -127,14 +123,14 @@ class BillStatusesController < ApplicationController
     }
 
     respond_with my_society_bill
-    
+
   end
-  
+
   def my_bill_confirmation
-    @bill_id = params[:bill_id]   
+    @bill_id = params[:bill_id]
     @payment_mode = params[:payment_mode]
     @ref_no = params[:ref_no]
-    
+
     @bill_update = BillStatus.find(@bill_id)
     @bill_update.payment_mode = @payment_mode
     @bill_update.ref_no = @ref_no
@@ -142,10 +138,10 @@ class BillStatusesController < ApplicationController
     @bill_update.confirmed_status = "Confirm"
     @bill_update.bill_amount_paid = params[:bill_amount_paid]
     @bill_update.save
-    
+
     # need user id param
     # @user = User.find(user_id)
-    
+
     @flat_detail = @bill_update.flat_id
     @date = @bill_update.month+'/'+@bill_update.fy
     @user_name = @bill_update.user_id
@@ -154,13 +150,13 @@ class BillStatusesController < ApplicationController
     @avenue_name = ""
     @building_no = @bill_update.building_master_id
     @flat_no = @bill_update.flat_id
-    @bill_amt =  @bill_update.bill_amt 
+    @bill_amt =  @bill_update.bill_amt
     @bill_amt_paid = params[:bill_amount_paid]
     @payment_type = @payment_mode
     # @Narration = ""
 
     respond_with @bill_update
-    
+
   end
 
   def confirm_bill
@@ -181,24 +177,25 @@ class BillStatusesController < ApplicationController
     billStatus.bill_amount_paid = params[:bill_amount_paid]
 
     billStatus.save
-    
-   @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number" => billStatus.flat_id)
+
+    # NotPaid
+
+    @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number" => billStatus.flat_id)
 
     if params[:confirmed_status] == "Paid"
-      @users.each do |user|  
-       Thread.new do
-        UserMailer.bill_confirm_paid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
-       end
-       end
-    else if params[:confirmed_status] == "NotPaid"
-       @users.each do |user|  
-       Thread.new do
-        UserMailer.bill_confirm_notpaid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
-       end
-       end
+      @users.each do |user|
+        Thread.new do
+          UserMailer.bill_confirm_paid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
+        end
+      end
+    else
+      @users.each do |user|
+        Thread.new do
+          UserMailer.bill_confirm_notpaid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
+        end
+      end
     end
-    
-    # NotPaid
+
     respond_with billStatus
   end
 
@@ -211,15 +208,15 @@ class BillStatusesController < ApplicationController
     @month = params[:month]
     @finacial_year = params[:fyear]
     BillStatus.import(params[:file], @user_id, @society_master_id, @month, @finacial_year)
-    # redirect_to root_url, notice: "Products imported." 
+    # redirect_to root_url, notice: "Products imported."
     response = Hash.new
     response["success"] = true
     respond_with response, :location => verify_account_path
-    
+
   end
 
   def import_excel
-    
+
   end
 
   def index
@@ -256,11 +253,12 @@ class BillStatusesController < ApplicationController
   end
 
   private
-    def set_bill_status
-      @bill_status = BillStatus.find(params[:id])
-    end
 
-    def bill_status_params
-      params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag, :flat_id, :confirmed_status,:payment_mode,:ref_no)
-    end
+  def set_bill_status
+    @bill_status = BillStatus.find(params[:id])
+  end
+
+  def bill_status_params
+    params.require(:bill_status).permit(:society_master_id, :building_master_id, :user_id, :bill_amt, :fy, :month, :status, :upload_status, :deletion_flag, :flat_id, :confirmed_status,:payment_mode,:ref_no)
+  end
 end
