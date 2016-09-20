@@ -36,10 +36,10 @@ class UserMailer < ActionMailer::Base
     mail(to: @to, subject: 'GCLife Membership Status – “Rejected”')
   end
 
-  def bill_due_status()
-    @user_name = ""
-    @bill_date = ""
-    @to = "subbiahmca@gmail.com"
+  def bill_due_status(name,email,month,year)
+    @user_name = name
+    @bill_date = month+"/"+year
+    @to = email
     mail(to: @to, subject: 'Society maintenance bill amount for the period of' + @bill_date)
   end
 
@@ -60,10 +60,17 @@ class UserMailer < ActionMailer::Base
     mail(to: @to, subject: 'Society maintenance bill amount Paid status - ' + @flat_detail+ ' for the period of '+ @date)
   end
 
-  def bill_confirm_status()
-    @user_name = ""
-    @bill_date = ""
-    @to = "subbiahmca@gmail.com"
+  def bill_confirm_paid_status(name,email,month,year)
+    @user_name = name
+    @bill_date = month+"/"+year
+    @to = email
     mail(to: @to, subject: 'Confirmation on Society maintenance Bill payment details for the period of '+ @bill_date)
+  end
+  
+  def bill_confirm_notpaid_status(name,email,month,year)
+    @user_name = name
+    @bill_date = month+"/"+year
+    @to = email
+    mail(to: @to, subject: 'Society maintenance Bill payment details was not found on our bank statement - Bill period '+ @bill_date)
   end
 end

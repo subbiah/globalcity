@@ -51,7 +51,15 @@ def self.import(file,user_id,soceity_id,month,fy)
       end
 
       @bill.save
+      
+        # GclifeRegistrationFlatdetails.where(:flat_number => @bill.flat_id)
+      @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number" => @bill.flat_id)
 
+      @users.each do |user|        
+        Thread.new do
+        UserMailer.bill_due_status(user.username,user.email,month,fy).deliver
+        end
+      end
       puts ":::::::::::::::::::::::::::::::::::::: end"
   end
 end

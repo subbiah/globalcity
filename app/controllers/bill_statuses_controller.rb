@@ -142,6 +142,22 @@ class BillStatusesController < ApplicationController
     @bill_update.confirmed_status = "Confirm"
     @bill_update.bill_amount_paid = params[:bill_amount_paid]
     @bill_update.save
+    
+    # need user id param
+    # @user = User.find(user_id)
+    
+    @flat_detail = @bill_update.flat_id
+    @date = @bill_update.month+'/'+@bill_update.fy
+    @user_name = @bill_update.user_id
+    @owner_name = @bill_update.user_id
+    @society_name = @bill_update.society_master_id
+    @avenue_name = ""
+    @building_no = @bill_update.building_master_id
+    @flat_no = @bill_update.flat_id
+    @bill_amt =  @bill_update.bill_amt 
+    @bill_amt_paid = params[:bill_amount_paid]
+    @payment_type = @payment_mode
+    # @Narration = ""
 
     respond_with @bill_update
     
@@ -165,7 +181,24 @@ class BillStatusesController < ApplicationController
     billStatus.bill_amount_paid = params[:bill_amount_paid]
 
     billStatus.save
+    
+   @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number" => billStatus.flat_id)
 
+    if params[:confirmed_status] == "Paid"
+      @users.each do |user|  
+       Thread.new do
+        UserMailer.bill_confirm_paid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
+       end
+       end
+    else if params[:confirmed_status] == "NotPaid"
+       @users.each do |user|  
+       Thread.new do
+        UserMailer.bill_confirm_notpaid_status(user.username,user.email,billStatus.month,billStatus.fy).deliver
+       end
+       end
+    end
+    
+    # NotPaid
     respond_with billStatus
   end
 
