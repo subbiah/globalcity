@@ -11,15 +11,6 @@ class Devise::SessionsController < DeviseController
   
   # GET /resource/sign_in
   def new
-      # @res = User.new
-      # @res.username = "subbiah"
-      # @res.otp = "subbiah"
-      # @res.email = "subbiahmca@gmail.com"       
-      # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{8123733117}&sender=GCSMST&message=code-#{12345}&")
-      # req = Net::HTTP.get(uri)
-      # puts req #show result        
-      # UserMailer.user_email(@res).deliver
-    
     self.resource = resource_class.new(sign_in_params)
     clean_up_passwords(resource)
     yield resource if block_given?
@@ -39,16 +30,19 @@ class Devise::SessionsController < DeviseController
     puts resource.inspect
 
     if params[:user][:device_token]
+
       #deleting previous device registration
-      prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
-      if prev_users != []
-        puts "previous user found!!!!!!"
-        prev_users.each do |u|
-          u.device_token = ""
-          u.save(:validate => false)
+      Thread.new do
+        prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
+        if prev_users != []
+          puts "previous user found!!!!!!"
+          prev_users.each do |u|
+            u.device_token = nil
+            u.save(:validate => false)
+          end
         end
       end
-
+      
       resource.device_token = params[:user][:device_token]
       resource.save(:validate => false)
 

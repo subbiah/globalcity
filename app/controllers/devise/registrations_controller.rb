@@ -195,6 +195,8 @@ class Devise::RegistrationsController < DeviseController
   def get_registered_users
     user = User.find(params[:user_id])
     puts ":::::::::::::::::::::::::::: "
+    puts "::::::::::::::::::::::::::::::::: params[:filter_type]"
+    puts params[:filter_type].inspect
     puts user.member_types.inspect
     users = Array.new
     User.all.each do |u|
@@ -205,7 +207,7 @@ class Devise::RegistrationsController < DeviseController
       if u.id != user.id
         u.gclife_registration_flatdetails.each do |flat|
           user.gclife_registration_flatdetails.each do |user_flat|
-            if (u.active == "Inactive" || u.active == "Approve") && ((flat.status == "Inactive") && (user.member_types[0].priority == 6)) || (flat.status == "Inactive" && (members.index(user_flat.member_type) == 5 || members.index(flat.member_type) < members.index(user_flat.member_type)) && user_flat.societyid == flat.societyid)
+            if (u.active == "Inactive" || u.active == "Approve") && ((flat.status == params[:filter_type]) && (user.member_types[0].priority == 6)) || (flat.status == params[:filter_type] && (members.index(user_flat.member_type) == 5 || members.index(flat.member_type) < members.index(user_flat.member_type)) && user_flat.societyid == flat.societyid)
               users_json = Hash.new
               users_json = u.user_flats(flat.id)
               users << JSON.parse(users_json)
@@ -370,7 +372,7 @@ class Devise::RegistrationsController < DeviseController
                 if (association_list.include? flat.avenue_name)
                   if (society_list.include? flat.societyid)
                     if (member_type_list.include? flat.member_type)
-                      if flat.member_type != "Non_members"
+                      if flat.member_type #!= "Non_members"
                         puts "::::::::::::::::::::::::::::: found user"
                         puts user.id
                         user.events << event

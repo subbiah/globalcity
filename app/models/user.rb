@@ -32,12 +32,14 @@ class User < ActiveRecord::Base
   end
   
   def send_notification(tittle, message, id, category)
-    gcm = GCM.new("AIzaSyCaRC7Cfahy41WKzUHPWTeXwlhHBABypkc")    
-    registration_ids= [self.device_token] # an array of one or more client registration IDs
-    options = {data: {tittle: tittle, message: message, category: category, event: id, notId: rand(5..10000)}, collapse_key: "updated_score"}
-    response = gcm.send(registration_ids, options)
-  
-    puts response
+    if self.device_token != nil && self.device_token != ""
+      gcm = GCM.new("AIzaSyCaRC7Cfahy41WKzUHPWTeXwlhHBABypkc")    
+      registration_ids= [self.device_token] # an array of one or more client registration IDs
+      options = {data: {tittle: tittle, message: message, category: category, event: id, notId: rand(5..10000)}, collapse_key: "updated_score"}
+      response = gcm.send(registration_ids, options)
+    
+      puts response
+    end
   end
 
 end

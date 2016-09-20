@@ -97,7 +97,7 @@ class EventsController < ApplicationController
             if (association_list.include? flat.avenue_name)
               if (society_list.include? flat.societyid)
                 if (member_type_list.include? flat.member_type)
-                  if flat.member_type != "Non_members"
+                  if flat.member_type #!= "Non_members"
                     puts "::::::::::::::::::::::::::::: found user"
                     puts u.id
                     u.events << @event
