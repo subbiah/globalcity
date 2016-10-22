@@ -207,7 +207,7 @@ class Devise::RegistrationsController < DeviseController
       if u.id != user.id
         u.gclife_registration_flatdetails.each do |flat|
           user.gclife_registration_flatdetails.each do |user_flat|
-            if (u.active == "Inactive" || u.active == "Approve") && ((flat.status == params[:filter_type]) && (user.member_types[0].priority == 6)) || (flat.status == params[:filter_type] && (members.index(user_flat.member_type) == 5 || members.index(flat.member_type) < members.index(user_flat.member_type)) && user_flat.societyid == flat.societyid)
+            if (u.active == "Inactive" || u.active == "Approve") && ((flat.status == params[:filter_type]) && (user.member_types[0].priority == 6)) || (flat.status == params[:filter_type] && (members.index(user_flat.member_type) == 5 || members.index(flat.member_type) < members.index(user_flat.member_type)) && user_flat.societyid == flat.societyid && user_flat.status == "Approve")
               users_json = Hash.new
               users_json = u.user_flats(flat.id)
               users << JSON.parse(users_json)
@@ -305,10 +305,12 @@ class Devise::RegistrationsController < DeviseController
       if params[:status] == 'Approve'
         #Send notification to all members in society pool
         Thread.new do
-          User.all.each do |u|
-            u.gclife_registration_flatdetails.each do |flat|
-              if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
-                u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+          ActiveRecord::Base.connection_pool.with_connection do
+            User.all.each do |u|
+              u.gclife_registration_flatdetails.each do |flat|
+                if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
+                  u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+                end
               end
             end
           end
@@ -358,35 +360,36 @@ class Devise::RegistrationsController < DeviseController
         #assigning previous event
         Thread.new do
           puts "Background thread started :::::::::"
-          Event.all.each do |event|
+          ActiveRecord::Base.connection_pool.with_connection do
+            Event.all.each do |event|
             association_list = event.association_list.split(',')
             society_list = event.society_list.split(',')
             member_type_list = event.member_type_list.split(',')
 
-            user.gclife_registration_flatdetails.each do |flat|
-              puts "::::::::::::::::::::::::::::: flat verification started"
-              puts flat.avenue_name
-              puts flat.societyid
-              puts flat.member_type
-              puts "::::::::::::::::::::::::::::::::::::::::"
-                if (association_list.include? flat.avenue_name)
-                  if (society_list.include? flat.societyid)
-                    if (member_type_list.include? flat.member_type)
-                      if flat.member_type #!= "Non_members"
-                        puts "::::::::::::::::::::::::::::: found user"
-                        puts user.id
-                        user.events << event
-                        user.save(:validate => false)
-                        break
+              user.gclife_registration_flatdetails.each do |flat|
+                puts "::::::::::::::::::::::::::::: flat verification started"
+                puts flat.avenue_name
+                puts flat.societyid
+                puts flat.member_type
+                puts "::::::::::::::::::::::::::::::::::::::::"
+                  if (association_list.include? flat.avenue_name)
+                    if (society_list.include? flat.societyid)
+                      if (member_type_list.include? flat.member_type)
+                        if flat.member_type #!= "Non_members"
+                          puts "::::::::::::::::::::::::::::: found user"
+                          puts user.id
+                          user.events << event
+                          user.save(:validate => false)
+                          break
+                        end
                       end
-                    end
-                  end 
-                end
+                    end 
+                  end
+              end
             end
           end
           puts "Background thread ended :::::::::"
         end
-
     end
     
     respond_with(user, :location => verify_account_path)

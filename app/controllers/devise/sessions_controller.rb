@@ -33,12 +33,14 @@ class Devise::SessionsController < DeviseController
 
       #deleting previous device registration
       Thread.new do
-        prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
-        if prev_users != []
-          puts "previous user found!!!!!!"
-          prev_users.each do |u|
-            u.device_token = nil
-            u.save(:validate => false)
+        ActiveRecord::Base.connection_pool.with_connection do
+          prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
+          if prev_users != []
+            puts "previous user found!!!!!!"
+            prev_users.each do |u|
+              u.device_token = nil
+              u.save(:validate => false)
+            end
           end
         end
       end

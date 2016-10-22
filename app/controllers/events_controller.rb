@@ -66,50 +66,52 @@ class EventsController < ApplicationController
       puts  "background work started"
       puts "::::::::::::::::::::::::::::::::::::::::::"
 
-      user = User.find(@event.user_id)
+      ActiveRecord::Base.connection_pool.with_connection do
+        user = User.find(@event.user_id)
 
-      puts "::::::::::::::::::::::::::::::::::::::::::"
-      puts  user.inspect
-      puts "::::::::::::::::::::::::::::::::::::::::::"
+        puts "::::::::::::::::::::::::::::::::::::::::::"
+        puts  user.inspect
+        puts "::::::::::::::::::::::::::::::::::::::::::"
 
-      user.events << @event
-      user.save(:validate => false)
+        user.events << @event
+        user.save(:validate => false)
 
-      association_list = params[:event][:association_list].split(',')
-      society_list = params[:event][:society_list].split(',')
-      member_type_list = params[:event][:member_type_list].split(',')
-      puts "::::::::::::::::::::::::::::: began all list"
-      puts association_list.inspect
-      puts society_list.inspect
-      puts member_type_list.inspect
-      puts "::::::::::::::::::::::::::::: end all list"
+        association_list = params[:event][:association_list].split(',')
+        society_list = params[:event][:society_list].split(',')
+        member_type_list = params[:event][:member_type_list].split(',')
+        puts "::::::::::::::::::::::::::::: began all list"
+        puts association_list.inspect
+        puts society_list.inspect
+        puts member_type_list.inspect
+        puts "::::::::::::::::::::::::::::: end all list"
 
-      User.all.each do |u|
-        if user.id != u.id
-          puts "::::::::::::::::::::::::::::: user check started"
-          puts u.id
-          u.gclife_registration_flatdetails.each do |flat|
-            puts "::::::::::::::::::::::::::::: flat verification started"
-            puts flat.avenue_name
-            puts flat.societyid
-            puts flat.member_type
-            puts "::::::::::::::::::::::::::::::::::::::::"
-            if (association_list.include? flat.avenue_name)
-              if (society_list.include? flat.societyid)
-                if (member_type_list.include? flat.member_type)
-                  if flat.member_type #!= "Non_members"
-                    puts "::::::::::::::::::::::::::::: found user"
-                    puts u.id
-                    u.events << @event
-                    u.save(:validate => false)
-                    u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
-                    break
+        User.all.each do |u|
+          if user.id != u.id
+            puts "::::::::::::::::::::::::::::: user check started"
+            puts u.id
+            u.gclife_registration_flatdetails.each do |flat|
+              puts "::::::::::::::::::::::::::::: flat verification started"
+              puts flat.avenue_name
+              puts flat.societyid
+              puts flat.member_type
+              puts "::::::::::::::::::::::::::::::::::::::::"
+              if (association_list.include? flat.avenue_name)
+                if (society_list.include? flat.societyid)
+                  if (member_type_list.include? flat.member_type)
+                    if flat.member_type #!= "Non_members"
+                      puts "::::::::::::::::::::::::::::: found user"
+                      puts u.id
+                      u.events << @event
+                      u.save(:validate => false)
+                      u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
+                      break
+                    end
                   end
-                end
-              end 
+                end 
+              end
             end
+            puts "::::::::::::::::::::::::::::: user check ended"
           end
-          puts "::::::::::::::::::::::::::::: user check ended"
         end
       end
 
