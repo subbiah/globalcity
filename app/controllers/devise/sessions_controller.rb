@@ -32,8 +32,8 @@ class Devise::SessionsController < DeviseController
     if params[:user][:device_token]
 
       #deleting previous device registration
-      Thread.new do
-        ActiveRecord::Base.connection_pool.with_connection do
+      # Thread.new do
+      #   ActiveRecord::Base.connection_pool.with_connection do
           prev_users = User.all.where(:device_token => params[:user][:device_token]) #find_by_all_device_token(params[:user][:device_token])
           if prev_users != []
             puts "previous user found!!!!!!"
@@ -42,22 +42,25 @@ class Devise::SessionsController < DeviseController
               u.save(:validate => false)
             end
           end
+
+          resource.device_token = params[:user][:device_token]
+          resource.save(:validate => false)
+
+          puts "::::::::::::::::::::: updated user"
+          puts resource.inspect
+
+          # send_notification(tittle, message, id, category)
+           # resource.send_notification("GCLife", "New device", "", "Login")
+          # gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+          # registration_ids= [resource.device_token] # an array of one or more client registration IDs
+          # options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}
+          # response = gcm.send(registration_ids, options)
+        
+          # puts response
         end
-      end
-      
-      resource.device_token = params[:user][:device_token]
-      resource.save(:validate => false)
+    #   end
 
-      # send_notification(tittle, message, id, category)
-      # resource.send_notification("GCLife", "New device", "", "Login")
-      # gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
-      # registration_ids= [resource.device_token] # an array of one or more client registration IDs
-      # options = {data: {tittle: "Tittle", message: "new device", category: "category"}, collapse_key: "updated_score"}
-      # response = gcm.send(registration_ids, options)
-    
-      # puts response
-
-    end
+    # end
 
     yield resource if block_given?
     respond_with resource.user_details, location: after_sign_in_path_for(resource)

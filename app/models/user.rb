@@ -38,6 +38,8 @@ class User < ActiveRecord::Base
       options = {data: {tittle: tittle, message: message, category: category, event: id, notId: rand(5..10000)}, collapse_key: "updated_score"}
       response = gcm.send(registration_ids, options)
     
+      puts ":::::::::::::::: #{self.email}"
+      puts "::::::::::::::::  nitification response"
       puts response
     end
   end

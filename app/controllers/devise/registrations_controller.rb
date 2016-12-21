@@ -87,6 +87,7 @@ class Devise::RegistrationsController < DeviseController
         gcFlat.ownertypeid = flat_details[:ownertypeid]
         gcFlat.member_type = flat_details[:member_type]
         gcFlat.avenue_name = flat_details[:avenue_name]
+        gcFlat.relationshipid = flat_details[:relationshipid]
         gcFlat.flat_number = flat_details[:flat_number]
         gcFlat.flat_type = flat_details[:flat_type]
         gcFlat.user_id = resource.id

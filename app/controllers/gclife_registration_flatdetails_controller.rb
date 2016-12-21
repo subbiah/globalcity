@@ -28,6 +28,15 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     puts "flat number :::::::::::::::::::::::::::::::"
     puts gclife_registration_flatdetail_params[:flat_number]
+
+    if gclife_registration_flatdetail_params[:tenurestart] != nil && gclife_registration_flatdetail_params[:tenurestart] != ""
+      @gclife_registration_flatdetail.tenurestart = Date.strptime(gclife_registration_flatdetail_params[:tenurestart], "%d-%m-%Y")
+    end
+
+    if gclife_registration_flatdetail_params[:tenureend] != nil && gclife_registration_flatdetail_params[:tenureend] != ""
+      @gclife_registration_flatdetail.tenureend = Date.strptime(gclife_registration_flatdetail_params[:tenureend], "%d-%m-%Y")
+    end
+
     if !Flat.where('flat LIKE ?',gclife_registration_flatdetail_params[:flat_number].to_s+'%').first
       puts "flat not found"
       respond_with({:errors => {:flat => "Flat number invalid."}}, :location => verify_account_path)
@@ -90,6 +99,6 @@ class GclifeRegistrationFlatdetailsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gclife_registration_flatdetail_params
-      params.require(:gclife_registration_flatdetail).permit(:user_id, :societyid, :buildingid, :ownertypeid, :avenue_name, :flat_number, :flat_type, :tenurestart, :tenureend, :member_type)
+      params.require(:gclife_registration_flatdetail).permit(:user_id, :societyid, :buildingid, :ownertypeid, :avenue_name, :flat_number, :flat_type, :tenurestart, :tenureend, :member_type, :relationshipid)
     end
 end

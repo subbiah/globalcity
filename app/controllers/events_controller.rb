@@ -89,6 +89,7 @@ class EventsController < ApplicationController
           if user.id != u.id
             puts "::::::::::::::::::::::::::::: user check started"
             puts u.id
+            puts u.email
             u.gclife_registration_flatdetails.each do |flat|
               puts "::::::::::::::::::::::::::::: flat verification started"
               puts flat.avenue_name
@@ -103,6 +104,8 @@ class EventsController < ApplicationController
                       puts u.id
                       u.events << @event
                       u.save(:validate => false)
+                      puts "::::::::::::::::::::::::::::: sending notification"
+                      puts u.email
                       u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
                       break
                     end
