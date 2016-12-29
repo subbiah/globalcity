@@ -18,7 +18,7 @@ class BillStatusesController < ApplicationController
     @confirmed_status = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED")
     @due_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Due", "CREATED").to_a.sum(&:bill_amt)
     @confirmed_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Confirmed", "CREATED").to_a.sum(&:bill_amt)
-        @paid_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Paid", "CREATED").to_a.sum(&:bill_amt)
+    @paid_amount = BillStatus.where("society_master_id = ? AND fy = ? AND month = ? AND status =? AND deletion_flag = ?", @societyid, @fy, @month, "Paid", "CREATED").to_a.sum(&:bill_amt)
         
     puts ":::::::::::::::: confirmed_amount"
     puts @confirmed_amount.inspect

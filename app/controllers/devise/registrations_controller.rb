@@ -58,7 +58,7 @@ class Devise::RegistrationsController < DeviseController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-
+        flat_details = params[:user][:gclife_registration_flatdetails]
         Thread.new do
           UserMailer.user_email(resource).deliver
           uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=GCLife Member Reg. OTP:#{code},Pls. contact society office for verification and approval.&")
@@ -66,14 +66,25 @@ class Devise::RegistrationsController < DeviseController
           puts req #show result        
           # UserMailer.user_email(resource).deliver
         end
-
+        
+        @userid = GclifeRegistrationFlatdetail.where(societyid:flat_details[:societyid],member_type:"Treasurer").collect(&:user_id)
+        
+        @adminusers = User.find(@userid)
+        
+        buildingno =  flat_details[:buildingid] 
+        flatno = flat_details[:flat_number]
+        
+        @adminusers.each do |u|          
         # Secretary SMS Code
-        # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{mobile}&sender=GCSMST&message=You got new member verification request from  #{fullname, BldgNo / Flat Number}&")
-        # req = Net::HTTP.get(uri)        
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{u.mobile}&sender=GCSMST&message=You got new member verification request from  #{u.username}, #{buildingno / flatno}&")
+        req = Net::HTTP.get(uri)  
+        end
+
+            
 
         puts "flat details :::::::::::::::::::::::::::::::"
         puts params[:user][:gclife_registration_flatdetails]
-        flat_details = params[:user][:gclife_registration_flatdetails]
+        
 
         # Creating GclifeRegistration 
         gclifeRegistration = GclifeRegistration.new
@@ -158,7 +169,10 @@ class Devise::RegistrationsController < DeviseController
         user.update_attribute(:otpflag, "Verified")
         
         # UserMailer.user_accept().deliver
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=code-#{user.otp}&")
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact -
+
+feedback@globalcityflatowners.org&")
+
         req = Net::HTTP.get(uri)
         
         # user.update_attribute(:otp, nil)

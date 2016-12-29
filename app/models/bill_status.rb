@@ -32,8 +32,10 @@ def self.import(file,user_id,soceity_id,month,fy)
         puts "previous bill found"
         puts @prev_bill[0].inspect
         puts ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
-        @prev_bill[0].deletion_flag = "DELETED"
-        @prev_bill[0].save
+        @prev_bill.each do |preBill|
+        preBill.deletion_flag = "DELETED"
+        preBill.save
+        end        
       end
 
       @bill.user_id = user_id
