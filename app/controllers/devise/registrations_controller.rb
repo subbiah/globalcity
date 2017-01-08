@@ -169,11 +169,11 @@ class Devise::RegistrationsController < DeviseController
         user.update_attribute(:otpflag, "Verified")
         
         # UserMailer.user_accept().deliver
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact -
-
-feedback@globalcityflatowners.org&")
-
-        req = Net::HTTP.get(uri)
+        # uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{user.mobile}&sender=GCSMST&message=Membership verified successfully. Please Re-login and explore GC Life. Contact -
+        # 
+        # feedback@globalcityflatowners.org&")
+         # 
+        # req = Net::HTTP.get(uri)
         
         # user.update_attribute(:otp, nil)
         #flash[:notice] = "Welcome! #{ user.members.name } You have signed up successfully."
