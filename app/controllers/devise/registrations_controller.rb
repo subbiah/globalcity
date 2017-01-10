@@ -76,7 +76,7 @@ class Devise::RegistrationsController < DeviseController
         
         @adminusers.each do |u|          
         # Secretary SMS Code
-        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{u.mobile}&sender=GCSMST&message=You got new member verification request from  #{u.username}, #{buildingno / flatno}&")
+        uri = URI("http://alerts.sinfini.com/api/v3/index.php?method=sms&api_key=A0e37350f1d9a4ad72fd345f980515a44&to=#{u.mobile}&sender=GCSMST&message=You got new member verification request from  #{u.username}, #{buildingno} , #{flatno}.&")
         req = Net::HTTP.get(uri)  
         end
 

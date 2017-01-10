@@ -35,9 +35,13 @@ class User < ActiveRecord::Base
     if self.device_token != nil && self.device_token != ""
       gcm = GCM.new("AIzaSyCaRC7Cfahy41WKzUHPWTeXwlhHBABypkc")    
       registration_ids= [self.device_token] # an array of one or more client registration IDs
-      options = {data: {tittle: tittle, message: message, category: category, event: id, notId: rand(5..10000)}, collapse_key: "updated_score"}
+      randCode = rand(5..10000)
+      options = {data: {tittle: tittle, message: message, category: category, event: id, notId: randCode}, collapse_key: "updated_score"}
       response = gcm.send(registration_ids, options)
     
+      puts "::::::::::::::::  Id:::::::::::: "
+      puts randCode
+      puts "::::::::::::::::  Id end:::::::::::: "
       puts ":::::::::::::::: #{self.email}"
       puts "::::::::::::::::  nitification response"
       puts response

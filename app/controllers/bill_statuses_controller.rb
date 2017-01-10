@@ -170,6 +170,11 @@ class BillStatusesController < ApplicationController
       billStatus.payment_mode = params[:payment_mode]
       billStatus.ref_no = params[:ref_no]
       billStatus.confirmed_status = "Confirmed" #params[:confirmed_status]
+    elsif params[:confirmed_status] == "Not paid"
+      billStatus.status = "Due"
+      billStatus.payment_mode = params[:payment_mode]
+      billStatus.ref_no = params[:ref_no]
+      billStatus.confirmed_status = "Due" #params[:confirmed_status]
     else
       billStatus.status = "Paid"
       billStatus.payment_mode = params[:payment_mode]
