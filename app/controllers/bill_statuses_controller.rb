@@ -61,18 +61,20 @@ class BillStatusesController < ApplicationController
     @finacialyear = params[:fyear]
     @userid = params[:user_id]
     user = User.find(@userid)
-
+    
+    @flatid = params[:flat_no]
+    
     # @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ?", @societyid, @finacialyear, @userid, @buildinno)
 
     # @paid = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Paid")
 
     # @due = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Due")
 
-    @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "CREATED")
+    @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND flat_id = ? AND building_master_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, @flatid,"CREATED")
 
-    @paid = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Paid", "CREATED")
+    @paid = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND flat_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Paid", @flatid, "CREATED")
 
-    @due = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Due", "CREATED")
+    @due = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND flat_id = ? AND  deletion_flag = ?", @societyid, @finacialyear, @buildinno,  "Due", @flatid,"CREATED")
 
     @paid_amt = @paid.sum :bill_amt
     @due_amt = @due.sum :bill_amt
