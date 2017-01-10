@@ -70,7 +70,7 @@ class BillStatusesController < ApplicationController
 
     # @due = BillStatus.where("society_master_id = ? AND fy = ? AND user_id = ? AND building_master_id = ? AND status = ?", @societyid, @finacialyear, @userid, @buildinno, "Due")
 
-    @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND flat_id = ? AND building_master_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, @flatid,"CREATED")
+    @bill_detail = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND  flat_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, @flatid,"CREATED")
 
     @paid = BillStatus.where("society_master_id = ? AND fy = ? AND building_master_id = ? AND status = ? AND flat_id = ? AND deletion_flag = ?", @societyid, @finacialyear, @buildinno, "Paid", @flatid, "CREATED")
 
