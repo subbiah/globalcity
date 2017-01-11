@@ -87,6 +87,9 @@ class MessagesController < ApplicationController
         @message.from_user_delete_flag = false
         @message.to_user_delete_flag = false
 
+        #adding to users
+        @messages.to_users = params[:names]
+
         @message.save
 
         # sending notification

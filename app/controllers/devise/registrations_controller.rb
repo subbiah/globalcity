@@ -325,6 +325,7 @@ class Devise::RegistrationsController < DeviseController
               u.gclife_registration_flatdetails.each do |flat|
                 if u.id != user.id && user.gclife_registration_flatdetails[0].societyid == flat.societyid
                   u.send_notification("GCLife", "#{user.username} Approved", "", "Approved")
+                  break
                 end
               end
             end

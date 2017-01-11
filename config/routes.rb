@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     get "sign_in", :to => "devise/sessions#new"
     get "sign_up", :to => "devise/registrations#new"
     get "sign_out", :to => "devise/sessions#destroy"
+    get "log_out", :to => "devise/sessions#log_out"
     get "verify_account", :to => "devise/registrations#verify_account"
     get "resend_otp", :to => "devise/registrations#resend_otp"
     get "get_registered_users", :to => "devise/registrations#get_registered_users"
