@@ -88,7 +88,7 @@ class EventsController < ApplicationController
         adminUser = User.find_by_email("gclife@gmail.com")
         if user.id != adminUser.id
           puts "::::::::::::::::::::::::::::: sending notification"
-          puts u.email
+          puts adminUser.email
           adminUser.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
         end
 
