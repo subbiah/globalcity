@@ -85,8 +85,15 @@ class EventsController < ApplicationController
         puts member_type_list.inspect
         puts "::::::::::::::::::::::::::::: end all list"
 
+        adminUser = User.find_by_email("gclife@gmail.com")
+        if user.id != adminUser.id
+          puts "::::::::::::::::::::::::::::: sending notification"
+          puts adminUser.email
+          adminUser.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
+        end
+
         User.all.each do |u|
-          if user.id != u.id
+          if user.id != u.id && adminUser != u.id
             puts "::::::::::::::::::::::::::::: user check started"
             puts u.id
             puts u.email
@@ -96,21 +103,23 @@ class EventsController < ApplicationController
               puts flat.societyid
               puts flat.member_type
               puts "::::::::::::::::::::::::::::::::::::::::"
-              if (association_list.include? flat.avenue_name)
-                if (society_list.include? flat.societyid)
-                  if (member_type_list.include? flat.member_type)
-                    if flat.member_type #!= "Non_members"
-                      puts "::::::::::::::::::::::::::::: found user"
-                      puts u.id
-                      u.events << @event
-                      u.save(:validate => false)
-                      puts "::::::::::::::::::::::::::::: sending notification"
-                      puts u.email
-                      u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
-                      break
+              if u.active == "Approve"
+                if (association_list.include? flat.avenue_name)
+                  if (society_list.include? flat.societyid)
+                    if (member_type_list.include? flat.member_type)
+                      if flat.member_type #!= "Non_members"
+                        puts "::::::::::::::::::::::::::::: found user"
+                        puts u.id
+                        u.events << @event
+                        u.save(:validate => false)
+                        puts "::::::::::::::::::::::::::::: sending notification"
+                        puts u.email
+                        u.send_notification("GCLife", "#{user.username} posted #{@event.event_type} - #{@event.title}", @event.id, "#{@event.event_type}")
+                        break
+                      end
                     end
-                  end
-                end 
+                  end 
+                end
               end
             end
             puts "::::::::::::::::::::::::::::: user check ended"

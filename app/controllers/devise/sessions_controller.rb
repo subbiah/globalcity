@@ -74,6 +74,21 @@ class Devise::SessionsController < DeviseController
     respond_to_on_destroy
   end
 
+  #custome log out method
+  def log_out
+    hash = Hash.new
+    begin
+      user = User.find(params[:user_id])
+      user.device_token = nil
+      user.save(:validate => false)
+      hash["success"] = true
+    rescue
+      hash["success"] = false
+    end
+    
+    respond_with hash
+  end
+
   protected
 
   def sign_in_params

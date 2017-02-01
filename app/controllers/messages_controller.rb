@@ -76,16 +76,28 @@ class MessagesController < ApplicationController
       puts to_users.inspect      
     end
 
+    i = 0
     if to_users != []
       to_users.each do |name|
         user = User.find_by_email(name)
 
-        @message = Message.new(message_params)
-        @message.to_user_id = user.id
+        # @message = Message.new(message_params)
+        @message = Message.new
+        if i == 0
+          @message.from_user_id = message_params[:from_user_id]
+          i = i + 1
+        end 
+
+        @message.subject = message_params[:subject]
+        @message.message = message_params[:message]
         @message.sender_name = from_user.email
+        @message.to_user_id = user.id
         @message.receiver_name = name
         @message.from_user_delete_flag = false
         @message.to_user_delete_flag = false
+
+        #adding to users
+        @message.to_users = params[:names]
 
         @message.save
 

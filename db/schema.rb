@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160904130530) do
+ActiveRecord::Schema.define(version: 20170111173704) do
 
   create_table "association_masters", force: true do |t|
     t.string   "associationname"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20160904130530) do
   end
 
   create_table "events", force: true do |t|
-    t.string   "title"
+    t.text     "title"
     t.text     "sdesc"
     t.text     "bdesc"
     t.string   "event_type"
@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 20160904130530) do
   create_table "messages", force: true do |t|
     t.integer  "from_user_id"
     t.integer  "to_user_id"
-    t.string   "subject"
+    t.text     "subject"
     t.string   "sender_name"
     t.string   "receiver_name"
     t.text     "message"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 20160904130530) do
     t.datetime "updated_at"
     t.boolean  "from_user_delete_flag"
     t.boolean  "to_user_delete_flag"
+    t.text     "to_users"
   end
 
   create_table "role_types", force: true do |t|
