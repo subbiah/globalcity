@@ -91,7 +91,7 @@ class BillStatusesController < ApplicationController
       user.gclife_registration_flatdetails.each do |flat|
         puts "flat details :::::: #{flat.flat_number.to_i}"
         puts "bil flat details :::::: #{bill.flat_id}"
-        if flat.flat_number.to_i == bill.flat_id
+        if flat.flat_number.to_i == bill.flat_id && flat.buildingid.to_i == bill.building_master_id
         @updated_bils << bill
         end
       end
