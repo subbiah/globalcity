@@ -103,7 +103,7 @@ class EventsController < ApplicationController
               puts flat.societyid
               puts flat.member_type
               puts "::::::::::::::::::::::::::::::::::::::::"
-              if u.active == "Approve"
+              if u.active == "Approve" && flat.status = "Approve"
                 if (association_list.include? flat.avenue_name)
                   if (society_list.include? flat.societyid)
                     if (member_type_list.include? flat.member_type)

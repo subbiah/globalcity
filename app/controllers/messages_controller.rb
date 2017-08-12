@@ -30,7 +30,9 @@ class MessagesController < ApplicationController
     puts @event = params[:event]
     puts "-------------------------------------"  
     
-    
+    # @token = "AIzaSyBIdiIRJkVvCN9-e7ucEAsuO_I1gvxQCCIf-4kvNnWMd4:APA91bHkgwoQMVYq70CfPLA7gLP1gI0W1fm5tc_YP_d_cppAy9GafJqzOk0_PzPI4Qaw-dkkePySC-NRxF6K6xxUmFKwVlq29Muh0VzkH3-KAaOVlSfjv6Yrj2j052STI_gwL-3j9duY"
+    # @token = "f-4kvNnWMd4:APA91bHkgwoQMVYq70CfPLA7gLP1gI0W1fm5tc_YP_d_cppAy9GafJqzOk0_PzPI4Qaw-dkkePySC-NRxF6K6xxUmFKwVlq29Muh0VzkH3-KAaOVlSfjv6Yrj2j052STI_gwL-3j9duY"
+    puts @token
       # GCM.host = 'https://android.googleapis.com/gcm/send'
          # GCM.format = :json
          # GCM.key = "AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY"
@@ -44,11 +46,22 @@ class MessagesController < ApplicationController
          # destination = [@token]
          # GCM.send_notification( destination, data )  
 
-    gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
-    registration_ids= [@token] # an array of one or more client registration IDs
+    # gcm = GCM.new("AIzaSyDsczG6Kf7O3k7re7MjzwPcxYN3s13FfvY")    
+    # registration_ids= [@token] # an array of one or more client registration IDs
+    # options = {data: {tittle: @tittle, message: @msg, category: @category, event: @event}, collapse_key: "updated_score"}
+    # response = gcm.send(registration_ids, options)
+
+    fcm = FCM.new("AIzaSyBIdiIRJkVvCN9-e7ucEAsuO_I1gvxQCCI")
+    # you can set option parameters in here
+    #  - all options are pass to HTTParty method arguments
+    #  - ref: https://github.com/jnunemaker/httparty/blob/master/lib/httparty.rb#L29-L60
+    #  fcm = FCM.new("my_api_key", timeout: 3)
+
+    # registration_ids= ["12", "13"] # an array of one or more client registration tokens
     options = {data: {tittle: @tittle, message: @msg, category: @category, event: @event}, collapse_key: "updated_score"}
-    response = gcm.send(registration_ids, options)
-    
+    registration_ids= [@token]
+    response = fcm.send(registration_ids, options)
+        
     puts response
   end
 
@@ -103,7 +116,7 @@ class MessagesController < ApplicationController
 
         # sending notification
         # send_notification(tittle, message, id, category)
-        user.send_notification("GCLife - ", "Mail from #{from_user.username}", "", "Inbox")
+        user.send_notification("GCLife", "Mail from #{from_user.username}", "Inbox", "Inbox")
 
       end
     end
