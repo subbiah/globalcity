@@ -33,7 +33,9 @@ class User < ActiveRecord::Base
   
   def send_notification(tittle, message, id, category)
     if self.device_token != nil && self.device_token != ""
-      gcm = GCM.new("AIzaSyBm1STkd533t0-Pox3Ni1KaaDyI7BTM1Ws")    
+      # gcm = GCM.new("AIzaSyBm1STkd533t0-Pox3Ni1KaaDyI7BTM1Ws") 
+       fcm = FCM.new("AIzaSyBIdiIRJkVvCN9-e7ucEAsuO_I1gvxQCCI")
+   
       registration_ids= [self.device_token] # an array of one or more client registration IDs
       randCode = rand(5..10000)
       options = {data: {tittle: tittle, message: message, category: category, event: id, notId: randCode}, collapse_key: "updated_score"}
