@@ -51,6 +51,8 @@ config.action_mailer.asset_host = 'http://35.166.172.142:3000'
 
 config.action_mailer.default_url_options = { :host => 'http://35.166.172.142:3000' }
 
+Rails.application.routes.default_url_options[:host] = 'http://35.166.172.142:3000'
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
