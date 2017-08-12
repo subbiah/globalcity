@@ -2,7 +2,6 @@ class BillStatus < ActiveRecord::Base
   
 
 def self.import(file,user_id,soceity_id,month,fy)
-  puts "3333333333333333333333333333333333333333"
   puts file.original_filename
   spreadsheet = open_spreadsheet(file)
     # spreadsheet  = Roo::Excel.new(file)
@@ -54,8 +53,8 @@ def self.import(file,user_id,soceity_id,month,fy)
 
       @bill.save
       
-        # GclifeRegistrationFlatdetails.where(:flat_number => @bill.flat_id)
-      @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number" => @bill.flat_id)
+      # GclifeRegistrationFlatdetails.where(:flat_number => @bill.flat_id)
+      @users = User.joins(:gclife_registration_flatdetails).where("gclife_registration_flatdetails.flat_number = ? and gclife_registration_flatdetails.societyid = ?", @bill.flat_id, @bill.society_master_id)
 
       @users.each do |user|        
         Thread.new do
