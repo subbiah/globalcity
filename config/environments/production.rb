@@ -70,7 +70,7 @@ Rails.application.configure do
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
-
+config.action_mailer.default_url_options = { :host => 'http://35.166.172.142:3000' }
   # Disable automatic flushing of the log to improve performance.
   # config.autoflush_log = false
 
