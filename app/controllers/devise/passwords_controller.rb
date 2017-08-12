@@ -45,8 +45,8 @@ class Devise::PasswordsController < DeviseController
         set_flash_message(:notice, flash_message) if is_flashing_format?
         
           puts "resource--------------------------------------"
-    puts resource.inspect
-    puts "--------------------------------------------"
+          puts resource.inspect
+          puts "--------------------------------------------"
     
         # sign_in(resource_name, resource)
       else
