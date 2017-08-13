@@ -33,9 +33,9 @@ Rails.application.configure do
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
-  config.action_mailer.asset_host = 'http://35.166.172.142:3000'
+  config.action_mailer.asset_host = 'http://54.169.40.151:3000'
   
-  config.action_mailer.default_url_options = { :host => 'http://35.166.172.142:3000' }
+  config.action_mailer.default_url_options = { :host => 'http://54.169.40.151:3000' }
   
   config.action_mailer.delivery_method = :smtp
   # SMTP settings for gmail
@@ -51,8 +51,6 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
 
 
-
-  # Rails.application.routes.default_url_options[:host] = '35.166.172.142:3000'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

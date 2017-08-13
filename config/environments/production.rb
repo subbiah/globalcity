@@ -69,8 +69,7 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
-  Rails.application.routes.default_url_options[:host] = '35.166.172.142:3000'
+  config.active_support.deprecation = :notify 
   # Disable automatic flushing of the log to improve performance.
   # config.autoflush_log = false
 
