@@ -30,7 +30,7 @@ class EventCommentsController < ApplicationController
     # sending notification
     # send_notification(tittle, message, id, category)
     if @event_comment.user_id != user.id
-      user.send_notification("GCLife - #{@event.event_type}", "#{@event_comment.username} commented on your post", @event.id, "#{@event.event_type}")
+      # user.send_notification("GCLife - #{@event.event_type}", "#{@event_comment.username} commented on your post", @event.id, "#{@event.event_type}")
     end
     respond_with(@event_comment)
   end

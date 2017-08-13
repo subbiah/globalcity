@@ -28,14 +28,15 @@ Rails.application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
+  # Rails.application.routes.default_url_options[:host] = 'domain.com'
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
   config.action_mailer.asset_host = 'http://35.166.172.142:3000'
-
-  config.action_mailer.default_url_options = { :host => '35.166.172.142' ,:port =>'3000' }
+  
+  config.action_mailer.default_url_options = { :host => 'http://35.166.172.142:3000' }
+  
   config.action_mailer.delivery_method = :smtp
   # SMTP settings for gmail
   config.action_mailer.smtp_settings = {
