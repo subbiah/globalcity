@@ -15,6 +15,7 @@ class Devise::PasswordsController < DeviseController
 
     if successfully_sent?(resource)
       respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+      flash[:notice] = "Email Sent successfully"
     else
       respond_with(resource)
     end
@@ -38,23 +39,29 @@ class Devise::PasswordsController < DeviseController
         flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
         set_flash_message(:notice, flash_message) if is_flashing_format?
         # sign_in(resource_name, resource)
+        redirect_to sign_in_path
+        flash[:notice] = "Password Updated successfully"
       else
         set_flash_message(:notice, :updated_not_active) if is_flashing_format?
       end
-      respond_with resource, location: after_resetting_password_path_for(resource)
+      # respond_with resource, location: after_resetting_password_path_for(resource)
+      # flash[:notice] = "Password Updated successfully"
     else
       respond_with resource
     end
+    # flash[:notice] = "Password Updated successfully"
   end
 
   protected
     def after_resetting_password_path_for(resource)
       Devise.sign_in_after_reset_password ? after_sign_in_path_for(resource) : new_session_path(resource_name)
+      # flash[:notice] = "Password Updated successfully"
     end
 
     # The path used after sending reset password instructions
     def after_sending_reset_password_instructions_path_for(resource_name)
       new_session_path(resource_name) if is_navigational_format?
+      # flash[:notice] = "Password Updated successfully"
     end
 
     # Check if a reset_password_token is provided in the request
