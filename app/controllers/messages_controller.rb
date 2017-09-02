@@ -51,7 +51,7 @@ class MessagesController < ApplicationController
     # options = {data: {tittle: @tittle, message: @msg, category: @category, event: @event}, collapse_key: "updated_score"}
     # response = gcm.send(registration_ids, options)
 
-    fcm = FCM.new("AIzaSyBIdiIRJkVvCN9-e7ucEAsuO_I1gvxQCCI")
+    fcm = FCM.new("AAAA94VXrlo:APA91bFdGlEYuGg2MgD7QYFbuuWiPSoOC6KewSkE38n3bUnZCiGgqm4Z2Vp1U_zbL2KXF00Nao2YYCBnqeN4jJbD4REpxA5mIe5MrVnPoGK-mS0jeKrWyc_FmsN1S2G_0NNmXJYr9mKu")
     # you can set option parameters in here
     #  - all options are pass to HTTParty method arguments
     #  - ref: https://github.com/jnunemaker/httparty/blob/master/lib/httparty.rb#L29-L60
