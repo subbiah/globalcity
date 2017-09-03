@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   def send_notification(tittle, message, id, category)
     if self.device_token != nil && self.device_token != ""
        # gcm = GCM.new("AIzaSyBm1STkd533t0-Pox3Ni1KaaDyI7BTM1Ws") 
-       fcm = FCM.new("AIzaSyBIdiIRJkVvCN9-e7ucEAsuO_I1gvxQCCI")
+       fcm = FCM.new("AAAA94VXrlo:APA91bFdGlEYuGg2MgD7QYFbuuWiPSoOC6KewSkE38n3bUnZCiGgqm4Z2Vp1U_zbL2KXF00Nao2YYCBnqeN4jJbD4REpxA5mIe5MrVnPoGK-mS0jeKrWyc_FmsN1S2G_0NNmXJYr9mKu")
    
       registration_ids= [self.device_token] # an array of one or more client registration IDs
       randCode = rand(5..10000)
