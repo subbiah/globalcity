@@ -49,6 +49,6 @@ class ImportantContactsController < ApplicationController
     end
 
     def important_contact_params
-      params.require(:important_contact).permit(:name, :phno, :email)
+      params.require(:important_contact).permit(:name, :phno, :email, :category)
     end
 end

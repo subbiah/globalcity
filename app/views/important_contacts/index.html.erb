@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Phno</th>
       <th>Email</th>
+      <th>Category</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
         <td><%= important_contact.name %></td>
         <td><%= important_contact.phno %></td>
         <td><%= important_contact.email %></td>
+         <td><%= important_contact.category %></td>
         <td><%= link_to 'Show', important_contact %></td>
         <td><%= link_to 'Edit', edit_important_contact_path(important_contact) %></td>
         <td><%= link_to 'Destroy', important_contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>

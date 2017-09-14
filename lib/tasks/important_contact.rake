@@ -18,7 +18,9 @@ task :impcont => :environment do
          imcont.phno = a.to_s
         elsif index == 2
            imcont.email = a.to_s
-        end   
+        elsif index == 3
+           imcont.category = a.to_s
+        end  
       end
      imcont.save
     end
